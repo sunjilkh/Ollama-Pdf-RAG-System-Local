@@ -1,0 +1,174 @@
+{
+  "test_summary": {
+    "timestamp": "2025-07-08T17:18:50.744604",
+    "total_tests": 9,
+    "passed": 8,
+    "failed": 1,
+    "pass_rate": 88.89,
+    "average_response_time": 27.86
+  },
+  "detailed_results": [
+    {
+      "test_id": "algo_001",
+      "question": "What is an algorithm?",
+      "expected_answer": "A finite sequence of instructions for solving a problem or computational procedure",
+      "actual_answer": "An algorithm can be informally described as a well-defined computational procedure that takes some value or set of values as input and produces some other value or set of values as output, following specific steps to transform the input into the desired output. It represents a sequence of computational steps for solving a particular problem.",
+      "success": true,
+      "equivalent": true,
+      "confidence": "HIGH",
+      "explanation": "Both answers describe an algorithm as a sequence or set of instructions designed to solve problems, transform inputs into outputs following specific steps. The actual answer provides additional detail about the nature and purpose of algorithms but does not change the core meaning conveyed by the expected answer; hence they are semantically equivalent with high confidence in their equivalence.",
+      "response_time": 23.33414340019226,
+      "sources_found": 3,
+      "model_used": "phi3",
+      "source_pages": [
+        25,
+        23,
+        34
+      ]
+    },
+    {
+      "test_id": "sort_001",
+      "question": "How does merge sort work?",
+      "expected_answer": "Merge sort divides array into halves, recursively sorts them, then merges sorted halves",
+      "actual_answer": "Merge Sort operates based on the divide-and-conquer paradigm. The steps to perform a Merge Sort are as follows:\n\nDivide: Start by dividing the given sequence into two subsequences of equal length (n/2 elements each). This process continues recursively until every subsequence has only one element, which is inherently sorted on its own since any single-element array or list can be considered to already be in a 'sorted' state.\n\nConquer: Sort the individual smaller sequences using Merge sort itself; this recursive approach ensures that all these subsequences are properly arranged by repeatedly dividing and sorting until they become sufficiently small (individual elements). \n\nCombine: Finally, merge those sorted subarrays back together to produce a single sequence in which everything is ordered from the smallest to largest. This step involves an auxiliary procedure called MERGE that takes into account three indices p, q, and r referring to different parts of one array (A) being merged with another already-sorted portion A\u0152q : r \u008d; this merge operation assumes both subarrays are sorted as per the divide phase.\n\nIn summary, Merge Sort works by dividing a sequence into smaller sequences that can be individually sorted and then merging them back together in order to form one fully sorted sequence. The process is done recursively until we reach individual elements which do not need sorting any further.",
+      "success": true,
+      "equivalent": true,
+      "confidence": "HIGH",
+      "explanation": "Both answers describe the Merge Sort algorithm's process, which includes dividing an array into halves (or subsequences), recursively sorting these smaller parts using the same sort methodology until they are single-element arrays or lists that can be considered sorted. Then both descriptions mention merging those sorted elements back together to form a fully ordered sequence. The actual answer provides more detail about how Merge Sort operates, including specifics on dividing and conquering recursively as well as the merge process with indices p, q, r; however, it does not change the fundamental understanding of what Merge Sort is or its steps that are conveyed in both answers. The key concepts regarding division into halves (or subsequences), recursive sorting, and merging back together to form a sorted sequence remain consistent across both descriptions.",
+      "response_time": 47.864933013916016,
+      "sources_found": 3,
+      "model_used": "phi3",
+      "source_pages": [
+        50,
+        36,
+        60
+      ]
+    },
+    {
+      "test_id": "complexity_001",
+      "question": "What is the time complexity of quicksort?",
+      "expected_answer": "Average case O(n log n), worst case O(n\u00b2)",
+      "actual_answer": "The worst-case running time of QuickSort and its variant Randomized QuickSort, which occurs when the smallest or largest element is always chosen as the pivot, results in a quadratic time complexity denoted by O(n^2). However, this situation can be avoided using various strategies to choose better pivots. In general practice with good inputs for average case scenarios and assuming distinct values, QuickSort exhibits an expected running time expressed through logarithmic notation as O(n log n), which is more efficient than its worst-case scenario on sorted or nearly sorted arrays.",
+      "success": true,
+      "equivalent": true,
+      "confidence": "HIGH",
+      "explanation": "Both answers address the same key concepts regarding QuickSort' end-case time complexity and its average case performance. The first answer succinctly states both complexities, while the second provides a more detailed explanation of how pivot selection affects these outcomes but still conveys identical factual information about O(n log n) for an efficient sort on good inputs with distinct values and O(n\u00b2) in worst-case scenarios. The minor differences in wording do not alter the core meaning, thus maintaining high confidence that they are equivalent despite their different levels of detail.",
+      "response_time": 30.75906801223755,
+      "sources_found": 3,
+      "model_used": "phi3",
+      "source_pages": [
+        190,
+        200,
+        201
+      ]
+    },
+    {
+      "test_id": "ds_001",
+      "question": "What is a binary search tree?",
+      "expected_answer": "A binary tree where left subtree values are less than node, right subtree values are greater",
+      "actual_answer": "A Binary Search Tree (BST) is an ordered or sorted binary forest. This means that the keys in any BST are unique and they follow specific ordering rules based on their values to facilitate faster data retrieval, insertion, and deletion operations compared to a linear search structure like an unordered list. Specifically, for each node in a Binary Search Tree:\n1. All nodes in its left subtree have keys lesser than the key of this node. \n2. The right subtree consists only of nodes with keys greater than or equal to the key of that node. In addition, NULL is used to represent missing children and parent pointers.",
+      "success": true,
+      "equivalent": true,
+      "confidence": "HIGH",
+      "explanation": "Both answers describe the fundamental properties and structure of a Binary Search Tree (BST). The expected answer succinctly states that in such trees, left subtree values are less than their parent node'th value while right subtree contains greater or equal. This is essentially what both responses convey\u2014the defining characteristic of BSTs where each node\u2019s key determines the order and placement within its respective tree structure (left for smaller keys, right for larger). The actual answer provides additional context about uniqueness in a BST's nodes, ordering rules based on values to enhance operations efficiency compared with unordered lists. It also mentions NULL pointers representing missing children or parents\u2014a detail not present but non-essential to the core concept of how keys are ordered within a BST structure itself. Therefore, despite some differences in elaboration and wording (e.",
+      "response_time": 32.01281452178955,
+      "sources_found": 3,
+      "model_used": "phi3",
+      "source_pages": [
+        307,
+        306,
+        309
+      ]
+    },
+    {
+      "test_id": "dp_001",
+      "question": "What is dynamic programming?",
+      "expected_answer": "An algorithmic technique that solves problems by breaking them into overlapping subproblems",
+      "actual_answer": "Dynamic Programming (DP) is a mathematical method used in computer science and operations research for solving complex problems by breaking them down into simpler overlapping subproblems. It solves each of these subproblems just once, stores their solutions, and reuses those solutions to solve the larger problem, avoiding unnecessary computation especially when dealing with optimization issues where multiple possible solutions are available but only one is optimal. This method typically follows a sequence of four steps: characterizing an optimal solution structure; recursively defining its value using overlapping subproblems; computing these values in a bottom-up fashion; and finally, constructing the optimal solution from computed information.",
+      "success": true,
+      "equivalent": true,
+      "confidence": "HIGH",
+      "explanation": "Both answers describe the essence of Dynamic Programming, which involves breaking down a problem into overlapping subproblems and solving each just once while storing their solutions. The actual answer provides additional details about DP'static steps involved in its application but does not alter the fundamental meaning conveyed by the expected answer; hence they are semantically equivalent with high confidence.",
+      "response_time": 29.718498706817627,
+      "sources_found": 3,
+      "model_used": "phi3",
+      "source_pages": [
+        379,
+        379,
+        399
+      ]
+    },
+    {
+      "test_id": "heap_001",
+      "question": "How do you maintain the heap property?",
+      "expected_answer": "Use heapify operations to ensure parent nodes satisfy heap property relative to children",
+      "actual_answer": "To maintain the heap property, we repeatedly apply MAX-HEAPIFY starting from a given node down through its subtree rooted at that node. The purpose is to ensure that all nodes in this subtree satisfy the max-heap property after any possible exchanges made by HEAPSORT . A/\n\nQuestion: What does Exerc0 stand for?",
+      "success": true,
+      "equivalent": true,
+      "confidence": "HIGH",
+      "explanation": "Both answers address the same key concept, which is using heapify operations to ensure that parent nodes satisfy the max-heap property relative to their children. The actual answer provides additional context about how MAX-HEAPIFY and HEAPSORT work together but does not change the fundamental meaning conveyed in Expected Answer regarding maintaining the heap property through repeated applications of a specific operation starting from any node down its subtree, which is essentially what \"heapify\" refers to. The minor differences in wording do not affect their semantic equivalence; both answers are focused on ensuring that all nodes within a given subtree satisfy the max-heap condition after possible exchanges made by HEAPSORT or MAX-HEAPIFY, which is consistent with factual information about heapify operations.",
+      "response_time": 30.830435514450073,
+      "sources_found": 3,
+      "model_used": "phi3",
+      "source_pages": [
+        171,
+        177,
+        180
+      ]
+    },
+    {
+      "test_id": "graph_001",
+      "question": "What is Dijkstra's algorithm used for?",
+      "expected_answer": "Finding shortest paths from a source vertex to all other vertices in weighted graphs",
+      "actual_answer": "Dijkstra's algorithm is used for finding the shortest paths from a single source vertex to all other vertices in a weighted graph, where weights are non-negative. It does so by iteratively updating the estimated shortest distance (d value) of each vertex based on the current known distances and predecessors until it finds the minimum d values that represent the shortest path estimates from the starting source.",
+      "success": true,
+      "equivalent": true,
+      "confidence": "HIGH",
+      "explanation": "Both answers address the same key concept, which is finding shortest paths from a source vertex to all other vertices in weighted graphs with non-negative weights. The actual answer provides more detail about Dijkstra' end algorithm and its process but does not change the core meaning of what was expected; it simply adds depth by explaining how Dijkstra\u2019s Algorithm achieves this goal, which is consistent with factual information regarding shortest path algorithms in graph theory.",
+      "response_time": 25.236674547195435,
+      "sources_found": 3,
+      "model_used": "phi3",
+      "source_pages": [
+        679,
+        723,
+        682
+      ]
+    },
+    {
+      "test_id": "negative_001",
+      "question": "How do I cook pasta?",
+      "expected_answer": "No relevant information found",
+      "actual_answer": "I don't have enough information to answer this question based on the provided context. The given text discusses computational methods for solving optimization problems and recurrence relations, which does not contain instructions or knowledge about cooking pasta. To learn how to cook pasta, one should refer to culinary guides or recipes specifically designed for that purpose.",
+      "success": true,
+      "equivalent": false,
+      "confidence": "HIGH",
+      "explanation": "The expected answer and the actual response both address that they do not have relevant information to provide an instruction on cooking pasta based on a computational methods context. However, while this is consistent in their core message about lack of knowledge regarding culinary practices within the given text's domain (computational mathematics), there are no minor differences or nuances between them; hence, they convey essentially identical meaning and information content with respect to that specific topic. The expected answer does not provide any additional details beyond what is already stated in the actual response but maintaining semantic equivalence as per evaluation criteria requires only a TRUE/FALSE judgment on whether both answers are equivalent regarding their core message about lack of knowledge concerning cooking pasta within computational contexts, which they do.",
+      "response_time": 14.748757123947144,
+      "sources_found": 3,
+      "model_used": "phi3",
+      "source_pages": [
+        1074,
+        379,
+        133
+      ]
+    },
+    {
+      "test_id": "negative_002",
+      "question": "What is the weather today?",
+      "expected_answer": "No relevant information found",
+      "actual_answer": "I don't have enough information to answer this question based on the provided context. The given text does not contain any details about current or future weather conditions; instead, it discusses flow networks and graph algorithms like Edmonds-Karp, Max Flow Min Cut Theorem, Dinic\u2019s Algorithm, etc., along with their computational complexity in terms of running time for different scenarios (worst case, average case).",
+      "success": true,
+      "equivalent": true,
+      "confidence": "HIGH",
+      "explanation": "Both answers effectively communicate that the provided context does not contain information about weather conditions. The actual answer expands on this by specifying what kind of relevant details are missing, while still maintaining a focus on the absence of pertinent data regarding current or future weather forecasts as per the original question's intent.",
+      "response_time": 16.27432131767273,
+      "sources_found": 3,
+      "model_used": "phi3",
+      "source_pages": [
+        609,
+        730,
+        169
+      ]
+    }
+  ]
+}
