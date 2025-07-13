@@ -1,0 +1,174 @@
+{
+  "test_summary": {
+    "timestamp": "2025-07-13T17:33:42.373192",
+    "total_tests": 9,
+    "passed": 7,
+    "failed": 2,
+    "pass_rate": 77.78,
+    "average_response_time": 36.11
+  },
+  "detailed_results": [
+    {
+      "test_id": "algo_001",
+      "question": "What is an algorithm?",
+      "expected_answer": "A finite sequence of instructions for solving a problem or computational procedure",
+      "actual_answer": "An algorithm is a well-defined computational procedure that takes some value or set of values as input and produces some other value or set of values as output. It consists of a sequence of instructions designed to perform a specific task. In the context provided by Cormen on page 26, an informal definition of algorithms was given which aligns with this explanation:\n\n\"Informally, an algorithm is any well-defined computational procedure that takes some value(s), or set of values, as input and produces some other value(s), or set of values,\" (Cormen - Introduction to Algorithms, Page 26).",
+      "success": true,
+      "equivalent": true,
+      "confidence": "HIGH",
+      "explanation": "Both answers describe an algorithm as a finite sequence or procedure that takes inputs and produces outputs, which aligns with the core definition. The actual answer provides additional context from Cormen'that supports this understanding without altering the fundamental meaning conveyed in the expected answer.",
+      "response_time": 30.079957723617554,
+      "sources_found": 3,
+      "model_used": "phi3",
+      "source_pages": [
+        25,
+        23,
+        34
+      ]
+    },
+    {
+      "test_id": "sort_001",
+      "question": "How does merge sort work?",
+      "expected_answer": "Merge sort divides array into halves, recursively sorts them, then merges sorted halves",
+      "actual_answer": "Merge sort works by following the divide-and0x4a+;/divide-andconquer paradigm. The sequence to be sorted is divided into two subsequences of2 elements each (as stated in source [Cormen - Introduction to Algorithms, Page 51]). These smaller subproblems are then solved recursively using the merge sort algorithm itself ([source: Cormen - Introduction to Algorithms, Pages 37 and 61]). Once sorted individually, these subsequences are merged into a single sequence in order (as per source [Cormen - Introduction to Algorithms, Page 51]). The 'combine' step involves merging two smaller sorted sequences back together using an auxiliary procedure called MERGE ([source: Cormen - Introduction to Algorithms, Pages 37 and 61]), where the assumption is that each of these subarrays are already in a state of being individually sorted. Merge sort continues this process until reaching base cases (sequences with length = 1), which by definition are themselves ordered and therefore do not require further sorting actions ([source: Cormen - Introduction to Algorithms, Pages 37 and 61]).",
+      "success": true,
+      "equivalent": true,
+      "confidence": "HIGH",
+      "explanation": "Both answers describe the process by which merge sort operates, including its divide-and-conquer approach and recursive sorting. The actual answer provides more detail about how subsequences are divided (into halves of two elements each), but it still conveys that these smaller sequences will be sorted recursively using merge sort itself before being merged back together in order by the MERGE procedure, which is consistent with the expected description provided as a reference. The actual answer also touches upon base cases and auxiliary procedures like 'MERGE', while maintaining semantic equivalence to the core information about how merge sort works overall.",
+      "response_time": 47.399983406066895,
+      "sources_found": 3,
+      "model_used": "phi3",
+      "source_pages": [
+        50,
+        36,
+        60
+      ]
+    },
+    {
+      "test_id": "complexity_001",
+      "question": "What is the time complexity of quicksort?",
+      "expected_answer": "Average case O(n log n), worst case O(n\u00b2)",
+      "actual_answer": "The time complexity of quicksort is O(n log n) in the average and best cases. In the worst case, it has a quadratic running time of O(n^2), which occurs when the smallest or largest element is always chosen as the pivot (asymptotically speaking). However, with randomized versions such as RANDOMIZED -QUICKSORT that employ strategies to avoid consistently poor pivots, we expect a more robust O(n log n) running time.\n\nTo cite this information: [Source: Cormen - Introduction to Algorithms, Page 191] and [Source: Cormen - Introduction to Algorithms, Pages 201 & 202].",
+      "success": true,
+      "equivalent": true,
+      "confidence": "HIGH",
+      "explanation": "Both answers convey the same essential information regarding quicksort' end time complexities. The first answer succinctly states these as O(n log n) for average and worst cases, while also mentioning that randomized versions can avoid consistently poor pivots to maintain this complexity more often. This is consistent with what the second detailed explanation provides: it discusses how quicksort's performance varies based on pivot selection (average case O(n log n), worst-case quadratic time) and introduces a solution for mitigating bad cases through randomized strategies, which aligns well with Cormen\u2019s sources. The key concepts of average/worst-case complexities are addressed in both answers; the second answer provides additional context but does not contradict or significantly deviate from the first one's information regarding time complexity and pivot selection strategy",
+      "response_time": 40.59494161605835,
+      "sources_found": 3,
+      "model_used": "phi3",
+      "source_pages": [
+        190,
+        200,
+        201
+      ]
+    },
+    {
+      "test_id": "ds_001",
+      "question": "What is a binary search tree?",
+      "expected_answer": "A binary tree where left subtree values are less than node, right subtree values are greater",
+      "actual_answer": "A binary search tree (BST) is a data structure organized in the form of a binary tree. In this tree, each node contains a key and satellite data along with pointers to its left child, right child, and parent. The keys within any given node's subtree are strictly ordered: all keys in the left subtree are less than or equal to the node's key (in an example of max-heap), while all keys in the right subtree are greater than or equal to it. These properties allow for efficient search, insertion, and deletion operations within the tree [Cormen - Introduction to Algorithms, Page 308].",
+      "success": true,
+      "equivalent": true,
+      "confidence": "HIGH",
+      "explanation": "Both answers describe a binary tree with the property that left subtree values are less than or equal to node's value, and right subtree values are greater or equal. The actual answer provides additional details about BST structure (keys in nodes of any given subtree being strictly ordered), mentions extra elements like satellite data and parent pointers which do not change the core concept described but adds context for a more complete understanding. Both answers convey essentially the same meaning regarding binary tree properties, with only minor differences that don't affect their equivalence on this topic.",
+      "response_time": 37.43566823005676,
+      "sources_found": 3,
+      "model_used": "phi3",
+      "source_pages": [
+        307,
+        306,
+        309
+      ]
+    },
+    {
+      "test_id": "dp_001",
+      "question": "What is dynamic programming?",
+      "expected_answer": "An algorithmic technique that solves problems by breaking them into overlapping subproblems",
+      "actual_answer": "Dynamic programming is a method for solving complex problems by breaking them down into simpler subproblems. It solves each of these smaller problems once and then combines their solutions to solve the original problem. This approach typically applies when dealing with optimization problems that can have multiple possible solutions, where we are interested in finding an optimal solution\u2014that is, one with either the minimum or maximum value. Dynamic programming involves characterizing the structure of an optimal solution (Step 1), recursively defining its value based on subproblems' values (Step 2), and computing these values typically using a bottom-up approach to avoid recomputation. Finally, constructing an explicit optimal solution from computed information might be done if required (Step 4). These steps are outlined in detail in \"Introduction to Algorithms\" by Cormen on pages 380 and expanded upon on page 400.",
+      "success": true,
+      "equivalent": true,
+      "confidence": "HIGH",
+      "explanation": "Both answers describe the essence of dynamic programming, which is an algorithmic technique that solves problems by breaking them into overlapping subproblems. The actual answer provides a more detailed explanation and contextualizes it within \"Introduction to Algorithms\" while still conveying core information about how dynamic programming works\u2014solving each smaller problem once (Step 2), characterizing the structure of an optimal solution, computing these values typically using a bottom-up approach, and constructing an explicit optimal solution from computed information. The key concepts are addressed in both answers with only minor differences in wording that do not affect their semantic equivalence.",
+      "response_time": 41.230210304260254,
+      "sources_found": 3,
+      "model_used": "phi3",
+      "source_pages": [
+        379,
+        379,
+        399
+      ]
+    },
+    {
+      "test_id": "heap_001",
+      "question": "How do you maintain the heap property?",
+      "expected_answer": "Use heapify operations to ensure parent nodes satisfy heap property relative to children",
+      "actual_answer": "To maintain the heap property in a max-heap, each time an element is removed (decremented from `A: heap-size`), we call MAX-HEAPIFY with that node's index as the root (`MAX-HEAPIFY .A; i/`). According to Cormen - Introduction to Algorithms on Page 178, this ensures both children of nodei are roots of max-heaps. Then by decrementing `i`, we reestablish the loop invariant for the next iteration in line with what's outlined from lines 2 through 5 as part of HEAPSORT on Page 181, which maintains that each remaining node is a root of a max-heap.\n\nReferences:\n- Cormen - Introduction to Algorithms, Pages 178 and 181",
+      "success": true,
+      "equivalent": true,
+      "confidence": "HIGH",
+      "explanation": "Both answers address the same key concept, which is using heapify operations to maintain a max-heap property in relation to parent and child nodes. The actual answer provides additional context from Cormen's \"Introduction to Algorithms,\" explaining that MAX-HEAPIFY ensures both children of node `i` are roots of max-heaps after an element is removed, which aligns with the expected meaning conveyed in a more general sense by the first statement. The detailed explanation and references from Cormen's book provide high confidence for equivalence as they expand on how MAX-HEAPIFY maintains heap property consistency during decrement operations within HEAPSORT algorithm implementation, which is consistent with ensuring parent nodes satisfy max-heap properties relative to children in a broader sense.",
+      "response_time": 44.03371000289917,
+      "sources_found": 3,
+      "model_used": "phi3",
+      "source_pages": [
+        171,
+        177,
+        180
+      ]
+    },
+    {
+      "test_id": "graph_001",
+      "question": "What is Dijkstra's algorithm used for?",
+      "expected_answer": "Finding shortest paths from a source vertex to all other vertices in weighted graphs",
+      "actual_answer": "Answer: Dijkstra's algorithm is used for finding the shortest path between vertices in a graph with non-negative edge weights. According to \"Cormen - Introduction to Algorithms\" on page 680 and further explanation provided through Figures (b)-(f) as well as additional details from pages 683 and 724, we can understand that the algorithm selects an unvisited vertex with the smallest tentative distance; it then relaxes its adjacent edges to potentially find shorter paths. The process continues iteratively until all vertices are visited or there is no need for further improvement in the path estimates (shortest-path values). I have cited these sources which provide a comprehensive description of Dijkstra's algorithm, including illustrations and exercises that help explain its functioning step by step.",
+      "success": true,
+      "equivalent": true,
+      "confidence": "HIGH",
+      "explanation": "Both answers address the same key concept, which is finding shortest paths in weighted graphs using Dijkstra's algorithm. The actual answer provides a more detailed explanation and includes references to specific pages from \"Cormen - Introduction to Algorithms,\" as well as additional details that are not present in the expected answer but do align with its core meaning of describing how Dijkstra\u2019s Algorithm operates on weighted graphs for shortest path finding. The factual information is consistent, and while there may be minor differences in wording (e.g., \"non-negative edge weights\" vs. just \"weighted\"), they are not significant enough to change the meaning or understanding of Dijkstra's algorithm as it relates to weighted graphs with non-negative edges.",
+      "response_time": 38.70772624015808,
+      "sources_found": 3,
+      "model_used": "phi3",
+      "source_pages": [
+        679,
+        723,
+        682
+      ]
+    },
+    {
+      "test_id": "negative_001",
+      "question": "How do I cook pasta?",
+      "expected_answer": "No relevant information found",
+      "actual_answer": "I'm sorry, but I don't have enough information to answer the question based on the provided context. The text given is from \"Introduction to Algorithms\" by Thomas H.Cormen and discusses optimization problems, Turing-machine model, Akra-Bazzi method, residue modulo calculations, prime numbers of specific forms related with quadratic residues and nonquadratic residues in the context of algorithm efficiency analysis or finding square roots within a certain range based on Niven and Zuckerman's work. It does not provide information about cooking pasta.",
+      "success": true,
+      "equivalent": false,
+      "confidence": "HIGH",
+      "explanation": "The expected answer suggests that there is no relevant information found in the provided context, which pertains to algorithm analysis and number theory. In contrast, the actual answer misinterprets this expectation by incorrectly asserting a lack of pertinent details about cooking pasta when discussing mathematical concepts related to algorithms from Cormen's textbook. The discrepancy in content between what is expected versus provided indicates that they do not convey the same core information and meaning, hence FALSE for equivalence with HIGH confidence due to clear differences in subject matter discussed by both answers.",
+      "response_time": 24.91614270210266,
+      "sources_found": 3,
+      "model_used": "phi3",
+      "source_pages": [
+        1074,
+        133,
+        1002
+      ]
+    },
+    {
+      "test_id": "negative_002",
+      "question": "What is the weather today?",
+      "expected_answer": "No relevant information found",
+      "actual_answer": "Answer: I don't have enough information to answer this question based on the provided context. The weather is not mentioned in any of the sources cited (Cormen - Introduction to Algorithms, Pages 610, 170, and 615).",
+      "success": true,
+      "equivalent": false,
+      "confidence": "HIGH",
+      "explanation": "The expected answer clearly states that there is no relevant information found, while the actual answer provides a specific reason why it cannot find such information\u2014namely, because weather conditions are not mentioned in any of the cited sources. Although they do convey similar core meanings (lack of sufficient data), their expressions differ significantly; hence my high confidence level for this judgment due to clear discrepancies between what is expected and provided as an answer.",
+      "response_time": 20.610079288482666,
+      "sources_found": 3,
+      "model_used": "phi3",
+      "source_pages": [
+        609,
+        169,
+        614
+      ]
+    }
+  ]
+}

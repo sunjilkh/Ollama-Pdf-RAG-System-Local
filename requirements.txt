@@ -5,4 +5,14 @@ langchain-ollama
 langchain-chroma
 chromadb
 pytest
-boto3 
+boto3
+langdetect
+sentence-transformers
+transformers
+torch
+whisper
+pyaudio
+indic-nlp-library
+huggingface-hub
+deep-translator
+psutil 

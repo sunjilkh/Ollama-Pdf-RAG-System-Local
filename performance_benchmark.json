@@ -1,0 +1,127 @@
+{
+  "single_query": {
+    "total_time": 47.590080976486206,
+    "max_memory_usage": 465.796875,
+    "step_count": 6,
+    "slowest_steps": [
+      {
+        "step": "LLM inference",
+        "duration": 40.661831855773926,
+        "memory_before": 465.13671875,
+        "memory_after": 465.796875,
+        "memory_diff": 0.66015625,
+        "timestamp": "2025-07-14T01:04:03.562341"
+      },
+      {
+        "step": "Import modules",
+        "duration": 5.279569149017334,
+        "memory_before": 18.60546875,
+        "memory_after": 345.5703125,
+        "memory_diff": 326.96484375,
+        "timestamp": "2025-07-14T01:03:21.251024"
+      },
+      {
+        "step": "Load database",
+        "duration": 1.388885259628296,
+        "memory_before": 345.5703125,
+        "memory_after": 403.5859375,
+        "memory_diff": 58.015625,
+        "timestamp": "2025-07-14T01:03:22.640109"
+      },
+      {
+        "step": "Process translation",
+        "duration": 0.22081947326660156,
+        "memory_before": 403.5859375,
+        "memory_after": 464.1953125,
+        "memory_diff": 60.609375,
+        "timestamp": "2025-07-14T01:03:22.861120"
+      },
+      {
+        "step": "Database query",
+        "duration": 0.038902997970581055,
+        "memory_before": 464.1953125,
+        "memory_after": 465.1328125,
+        "memory_diff": 0.9375,
+        "timestamp": "2025-07-14T01:03:22.900184"
+      }
+    ],
+    "all_measurements": [
+      {
+        "step": "Import modules",
+        "duration": 5.279569149017334,
+        "memory_before": 18.60546875,
+        "memory_after": 345.5703125,
+        "memory_diff": 326.96484375,
+        "timestamp": "2025-07-14T01:03:21.251024"
+      },
+      {
+        "step": "Load database",
+        "duration": 1.388885259628296,
+        "memory_before": 345.5703125,
+        "memory_after": 403.5859375,
+        "memory_diff": 58.015625,
+        "timestamp": "2025-07-14T01:03:22.640109"
+      },
+      {
+        "step": "Process translation",
+        "duration": 0.22081947326660156,
+        "memory_before": 403.5859375,
+        "memory_after": 464.1953125,
+        "memory_diff": 60.609375,
+        "timestamp": "2025-07-14T01:03:22.861120"
+      },
+      {
+        "step": "Database query",
+        "duration": 0.038902997970581055,
+        "memory_before": 464.1953125,
+        "memory_after": 465.1328125,
+        "memory_diff": 0.9375,
+        "timestamp": "2025-07-14T01:03:22.900184"
+      },
+      {
+        "step": "Generate prompt",
+        "duration": 7.224082946777344e-05,
+        "memory_before": 465.1328125,
+        "memory_after": 465.13671875,
+        "memory_diff": 0.00390625,
+        "timestamp": "2025-07-14T01:03:22.900365"
+      },
+      {
+        "step": "LLM inference",
+        "duration": 40.661831855773926,
+        "memory_before": 465.13671875,
+        "memory_after": 465.796875,
+        "memory_diff": 0.66015625,
+        "timestamp": "2025-07-14T01:04:03.562341"
+      }
+    ],
+    "bottlenecks": [
+      {
+        "step": "LLM inference",
+        "duration": 40.661831855773926,
+        "memory_before": 465.13671875,
+        "memory_after": 465.796875,
+        "memory_diff": 0.66015625,
+        "timestamp": "2025-07-14T01:04:03.562341"
+      },
+      {
+        "step": "Import modules",
+        "duration": 5.279569149017334,
+        "memory_before": 18.60546875,
+        "memory_after": 345.5703125,
+        "memory_diff": 326.96484375,
+        "timestamp": "2025-07-14T01:03:21.251024"
+      },
+      {
+        "step": "Load database",
+        "duration": 1.388885259628296,
+        "memory_before": 345.5703125,
+        "memory_after": 403.5859375,
+        "memory_diff": 58.015625,
+        "timestamp": "2025-07-14T01:03:22.640109"
+      }
+    ]
+  },
+  "average_time": 51.80164475440979,
+  "timestamp": "2025-07-14T01:08:23.399378"
+}

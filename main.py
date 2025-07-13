@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-Main RAG System Runner
-Provides a unified interface to the complete RAG (Retrieval-Augmented Generation) system.
+Main BanglaRAG System Runner
+Provides a unified interface to the complete BanglaRAG (Retrieval-Augmented Generation) system
+with support for mixed-language (Bangla & English) text and voice input.
 """
 
 import sys
@@ -12,8 +13,9 @@ from datetime import datetime
 def print_banner():
     """Print system banner."""
     print("=" * 60)
-    print("🤖 CHAT PDF RAG SYSTEM")
-    print("📚 Retrieval-Augmented Generation for PDF Documents")
+    print("🎤 BANGLARAG SYSTEM")
+    print("📚 Mixed-Language RAG with Voice Input Support")
+    print("🌐 Supporting English & Bangla | 🎙️ Voice & Text Input")
     print("=" * 60)
 
 
@@ -220,6 +222,132 @@ def show_system_status():
         print("🤖 Ollama Models: Not available")
 
 
+def run_voice_input_session():
+    """Run interactive voice input session."""
+    print("\n🎤 Starting Voice Input Session...")
+
+    try:
+        # Check if voice input module is available
+        from voice_input import interactive_voice_session
+
+        print("✅ Voice input module loaded successfully")
+        print("\n📋 Instructions:")
+        print("- Press Enter to start recording")
+        print("- Speak clearly in English or Bangla")
+        print("- Default recording duration: 5 seconds")
+        print("- Type 'quit' to exit")
+
+        interactive_voice_session()
+
+    except ImportError as e:
+        print(f"❌ Voice input module not available: {e}")
+        print("\n📋 To enable voice input:")
+        print("1. Install dependencies: pip install openai-whisper pyaudio")
+        print("2. Ensure microphone is connected")
+    except Exception as e:
+        print(f"❌ Error in voice input session: {e}")
+
+
+def run_voice_input_test():
+    """Run voice input demonstration and tests."""
+    print("\n🧪 Running Voice Input Tests...")
+
+    try:
+        from test_voice_demo import main as run_voice_demo
+
+        print("✅ Voice demo module loaded successfully")
+        run_voice_demo()
+
+    except ImportError as e:
+        print(f"❌ Voice demo module not available: {e}")
+    except Exception as e:
+        print(f"❌ Error running voice tests: {e}")
+
+
+def process_single_voice_query():
+    """Process a single voice query."""
+    print("\n🎤 Single Voice Query")
+    print("=" * 40)
+
+    try:
+        from voice_input import process_voice_query, display_voice_query_results
+
+        print("🎙️ Preparing to record audio...")
+        print("📍 When ready, you'll have 5 seconds to speak your question")
+
+        input("Press Enter when ready to start recording...")
+
+        # Process voice query
+        result = process_voice_query(duration=5)
+
+        # Display results
+        display_voice_query_results(result)
+
+    except ImportError as e:
+        print(f"❌ Voice input module not available: {e}")
+    except Exception as e:
+        print(f"❌ Error processing voice query: {e}")
+
+
+def run_mixed_language_demo():
+    """Demonstrate mixed language capabilities."""
+    print("\n🌐 Mixed Language Capabilities Demo")
+    print("=" * 50)
+
+    try:
+        from ollama_llm import run_rag_query
+        from query_database import load_database
+
+        # Load database
+        db = load_database()
+        if not db:
+            print("❌ Database not available")
+            return
+
+        # Demo queries in different languages
+        demo_queries = [
+            {
+                "text": "What is an algorithm?",
+                "language": "English",
+                "description": "Basic algorithm definition",
+            },
+            {
+                "text": "How does quicksort work?",
+                "language": "English",
+                "description": "Algorithm explanation",
+            },
+            {
+                "text": "অ্যালগরিদম কি?",
+                "language": "Bangla",
+                "description": "Algorithm definition in Bangla",
+            },
+        ]
+
+        print("🔍 Testing queries in different languages:")
+
+        for i, query_info in enumerate(demo_queries, 1):
+            print(f"\n🎯 Query {i} ({query_info['language']}):")
+            print(f"📝 Text: {query_info['text']}")
+            print(f"📋 Description: {query_info['description']}")
+
+            result = run_rag_query(query_info["text"], db=db)
+
+            if result["success"]:
+                print(f"✅ Success!")
+                print(f"💬 Answer: {result['answer'][:150]}...")
+                if result.get("sources"):
+                    print(f"📚 Sources: {len(result['sources'])} pages")
+            else:
+                print(f"❌ Failed: {result['answer']}")
+
+            print("-" * 30)
+
+    except ImportError as e:
+        print(f"❌ Required modules not available: {e}")
+    except Exception as e:
+        print(f"❌ Error in mixed language demo: {e}")
+
+
 def main_menu():
     """Display main menu and handle user selection."""
     while True:
@@ -230,11 +358,15 @@ def main_menu():
         print("2. 🔄 Process Documents (Create/Update Database)")
         print("3. 🔍 Test Database Queries")
         print("4. 💬 Interactive Chat Session")
-        print("5. 🧪 Run System Tests")
-        print("6. 🛠️ Check Dependencies")
-        print("7. 🚪 Exit")
+        print("5. 🎤 Voice Input Session")
+        print("6. 🎙️ Single Voice Query")
+        print("7. 🌐 Mixed Language Demo")
+        print("8. 🧪 Run System Tests")
+        print("9. 🔬 Voice Input Tests")
+        print("10. 🛠️ Check Dependencies")
+        print("11. 🚪 Exit")
 
-        choice = input("\nSelect option (1-7): ").strip()
+        choice = input("\nSelect option (1-11): ").strip()
 
         if choice == "1":
             show_system_status()
@@ -245,8 +377,16 @@ def main_menu():
         elif choice == "4":
             run_interactive_chat()
         elif choice == "5":
-            run_system_tests()
+            run_voice_input_session()
         elif choice == "6":
+            process_single_voice_query()
+        elif choice == "7":
+            run_mixed_language_demo()
+        elif choice == "8":
+            run_system_tests()
+        elif choice == "9":
+            run_voice_input_test()
+        elif choice == "10":
             print("\n🛠️ Checking Dependencies...")
             issues = check_dependencies()
             if issues:
@@ -255,11 +395,11 @@ def main_menu():
                     print(f"   - {issue}")
             else:
                 print("✅ All dependencies working correctly!")
-        elif choice == "7":
+        elif choice == "11":
             print("👋 Goodbye!")
             break
         else:
-            print("❌ Invalid choice. Please select 1-7.")
+            print("❌ Invalid choice. Please select 1-11.")
 
         input("\nPress Enter to continue...")
 

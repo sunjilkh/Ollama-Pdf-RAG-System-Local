@@ -59,9 +59,7 @@ def create_or_update_database(chunks_with_ids, persist_directory="db"):
             # Add documents to database
             db.add_documents(new_chunks, ids=new_ids)
 
-            # Persist the database
-            db.persist()
-
+            # Note: ChromaDB automatically persists data in newer versions
             print(f"✅ Successfully added {len(new_chunks)} new chunks to database")
         except Exception as e:
             print(f"❌ Error adding chunks to database: {e}")

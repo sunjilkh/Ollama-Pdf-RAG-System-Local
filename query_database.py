@@ -30,22 +30,22 @@ def load_database(persist_directory="db"):
             print("Database exists but is empty.")
             return None
 
-        print(f"✅ Loaded database with {len(data['ids'])} documents")
+        print(f"✅ Database loaded successfully with {len(data['ids'])} documents")
         return db
 
     except Exception as e:
-        print(f"Error loading database: {e}")
+        print(f"❌ Error loading database: {e}")
         return None
 
 
 def query_database(db, query, k=5):
     """
-    Query the database and retrieve relevant chunks.
+    Query the vector database and return relevant documents.
 
     Args:
         db: ChromaDB vector store instance
-        query: User query string
-        k: Number of top results to retrieve
+        query: Search query string
+        k: Number of documents to retrieve
 
     Returns:
         List of relevant document chunks
@@ -55,13 +55,9 @@ def query_database(db, query, k=5):
         return []
 
     try:
-        print(f"Querying database for: '{query}'")
-        print(f"Retrieving top {k} relevant chunks...")
-
-        # Perform similarity search
+        # Search for relevant documents
         results = db.similarity_search(query, k=k)
-
-        print(f"Found {len(results)} relevant chunks")
+        print(f"Found {len(results)} relevant documents")
         return results
 
     except Exception as e:
@@ -71,32 +67,53 @@ def query_database(db, query, k=5):
 
 def query_database_with_scores(db, query, k=5):
     """
-    Query database and return results with similarity scores.
+    Query the vector database and return documents with similarity scores.
 
     Args:
         db: ChromaDB vector store instance
-        query: User query string
-        k: Number of top results to retrieve
+        query: Search query string
+        k: Number of documents to retrieve
 
     Returns:
-        List of tuples (document, score)
+        List of tuples: (document, similarity_score)
     """
     if db is None:
         print("Database is not available")
         return []
 
     try:
-        print(f"Querying database with scores for: '{query}'")
-
-        # Perform similarity search with scores
+        # Search for relevant documents with scores
         results = db.similarity_search_with_score(query, k=k)
-
-        print(f"Found {len(results)} relevant chunks with scores")
+        print(f"Found {len(results)} relevant documents with scores")
         return results
 
     except Exception as e:
         print(f"Error querying database with scores: {e}")
         return []
+
+
+def get_citation_info(metadata):
+    """
+    Extract citation information from document metadata.
+
+    Args:
+        metadata (dict): Document metadata
+
+    Returns:
+        str: Formatted citation string
+    """
+    file_name = metadata.get(
+        "file_name", metadata.get("source_file", "Unknown Document")
+    )
+    page_number = metadata.get("page_number", metadata.get("page", "Unknown"))
+
+    # Clean up file name (remove extension and path)
+    if file_name and file_name != "Unknown Document":
+        clean_name = os.path.basename(file_name).replace(".pdf", "")
+    else:
+        clean_name = "Unknown Document"
+
+    return f"{clean_name}, Page {page_number}"
 
 
 def generate_prompt_template(query, results, max_context_length=4000):
@@ -123,10 +140,16 @@ Please ask a question about the content in the uploaded documents.
     # Combine context from all results
     contexts = []
     current_length = 0
+    citation_info = []
 
     for i, result in enumerate(results):
         content = result.page_content.strip()
-        source_info = f"[Source: Page {result.metadata.get('page', 'Unknown')}]"
+
+        # Get citation information
+        citation = get_citation_info(result.metadata)
+        citation_info.append(citation)
+
+        source_info = f"[Source: {citation}]"
 
         # Check if adding this context would exceed the limit
         new_content = f"{source_info}\n{content}\n\n"
@@ -138,30 +161,74 @@ Please ask a question about the content in the uploaded documents.
 
     context = "".join(contexts).strip()
 
+    # Create unique citations list
+    unique_citations = list(
+        dict.fromkeys(citation_info)
+    )  # Preserve order, remove duplicates
+    citations_text = "\n".join([f"- {citation}" for citation in unique_citations])
+
     prompt_template = f"""Use the following context to answer the question. If the answer cannot be found in the context, say "I don't have enough information to answer this question based on the provided context."
+
+Always cite your sources using the page numbers provided in the context.
 
 Context:
 {context}
 
 Question: {query}
 
-Answer:"""
+Answer: [Provide your answer here and cite the relevant pages]
+
+Sources:
+{citations_text}"""
 
     return prompt_template
+
+
+def format_search_results(results, query):
+    """
+    Format search results for display with proper citations.
+
+    Args:
+        results: List of search results
+        query: Original search query
+
+    Returns:
+        str: Formatted results string
+    """
+    if not results:
+        return "No relevant results found."
+
+    formatted_results = []
+    formatted_results.append(f"🔍 Search Results for: '{query}'")
+    formatted_results.append("=" * 50)
+
+    for i, result in enumerate(results, 1):
+        citation = get_citation_info(result.metadata)
+        content_preview = (
+            result.page_content[:200] + "..."
+            if len(result.page_content) > 200
+            else result.page_content
+        )
+
+        formatted_results.append(f"\n📄 Result {i}: {citation}")
+        formatted_results.append(f"Content: {content_preview}")
+        formatted_results.append("-" * 30)
+
+    return "\n".join(formatted_results)
 
 
 def interactive_query_session(db):
     """Run an interactive query session."""
     if db is None:
-        print("Database is not available for interactive session")
+        print("Database is not available")
         return
 
-    print("\n🔍 Interactive Query Session")
-    print("Enter your questions (type 'quit' to exit):")
+    print("Interactive query session started")
+    print("Type 'quit' to exit")
 
     while True:
         try:
-            query = input("\nQ: ").strip()
+            query = input("\n🔍 Enter your query: ").strip()
 
             if query.lower() in ["quit", "exit", "q"]:
                 print("Goodbye!")
@@ -170,29 +237,22 @@ def interactive_query_session(db):
             if not query:
                 continue
 
-            # Query database
-            results = query_database_with_scores(db, query, k=3)
+            # Query the database
+            results = query_database(db, query, k=5)
 
-            if not results:
-                print("No relevant information found.")
-                continue
+            if results:
+                print(f"\n✅ Found {len(results)} relevant documents")
 
-            # Generate prompt
-            docs_only = [doc for doc, score in results]
-            prompt = generate_prompt_template(query, docs_only)
+                # Display formatted results
+                formatted_results = format_search_results(results, query)
+                print(formatted_results)
 
-            print("\n" + "=" * 50)
-            print("GENERATED PROMPT FOR LLM:")
-            print("=" * 50)
-            print(prompt)
-            print("=" * 50)
-
-            # Show similarity scores
-            print("\nRelevance Scores:")
-            for i, (doc, score) in enumerate(results, 1):
-                print(
-                    f"  Result {i}: {score:.4f} (Page {doc.metadata.get('page', 'N/A')})"
-                )
+                # Generate and display prompt
+                prompt = generate_prompt_template(query, results)
+                print(f"\n📝 Generated prompt for LLM:")
+                print(prompt)
+            else:
+                print("❌ No relevant documents found")
 
         except KeyboardInterrupt:
             print("\nGoodbye!")
@@ -202,45 +262,60 @@ def interactive_query_session(db):
 
 
 def test_sample_queries(db):
-    """Test the system with sample queries."""
-    sample_queries = [
+    """Test the database with sample queries."""
+    if db is None:
+        print("Database is not available for testing")
+        return
+
+    test_queries = [
         "What is an algorithm?",
-        "How does merge sort work?",
-        "What is the time complexity of quick sort?",
-        "Explain binary search trees",
-        "What is dynamic programming?",
+        "How does quicksort work?",
+        "What is the time complexity of binary search?",
+        "Explain dynamic programming",
+        "What is a graph data structure?",
     ]
 
-    print("\n🧪 Testing Sample Queries:")
+    print("🧪 Testing database with sample queries...")
     print("=" * 50)
 
-    for query in sample_queries:
-        print(f"\nQuery: {query}")
-        results = query_database(db, query, k=2)
+    for query in test_queries:
+        print(f"\n🔍 Query: {query}")
+        results = query_database(db, query, k=3)
 
         if results:
-            prompt = generate_prompt_template(query, results, max_context_length=1000)
-            print(f"Generated prompt length: {len(prompt)} characters")
-            print(f"Context sources: Pages {[r.metadata.get('page') for r in results]}")
+            print(f"✅ Found {len(results)} results")
+            for i, result in enumerate(results, 1):
+                citation = get_citation_info(result.metadata)
+                preview = (
+                    result.page_content[:100] + "..."
+                    if len(result.page_content) > 100
+                    else result.page_content
+                )
+                print(f"   {i}. {citation}")
+                print(f"      {preview}")
         else:
-            print("No relevant results found")
+            print("❌ No results found")
 
         print("-" * 30)
 
 
 if __name__ == "__main__":
-    print("Starting query database system...")
-
     # Load database
     db = load_database()
 
     if db:
-        # Test with sample queries
-        test_sample_queries(db)
+        print("Choose an option:")
+        print("1. Interactive query session")
+        print("2. Run sample queries")
 
-        # Start interactive session
-        interactive_query_session(db)
+        choice = input("Enter choice (1 or 2): ").strip()
+
+        if choice == "1":
+            interactive_query_session(db)
+        elif choice == "2":
+            test_sample_queries(db)
+        else:
+            print("Invalid choice, running sample queries...")
+            test_sample_queries(db)
     else:
-        print(
-            "Please ensure the vector database is created first by running create_database.py"
-        )
+        print("Failed to load database. Please run create_database.py first.")

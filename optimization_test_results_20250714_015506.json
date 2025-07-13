@@ -1,0 +1,112 @@
+{
+  "timestamp": "2025-07-14T01:55:06.440502",
+  "total_test_time": 72.06821703910828,
+  "results": [
+    {
+      "test": "database_loading",
+      "success": true,
+      "time": 5.641958951950073,
+      "status": "SLOW"
+    },
+    {
+      "test": "model_optimization",
+      "success": true,
+      "query_time": 6.008923292160034,
+      "model_used": "qwen2:1.5b",
+      "status": "GOOD"
+    },
+    {
+      "test": "translation_optimization",
+      "success": true,
+      "english_time": 0.17152667045593262,
+      "bangla_time": 0.2546834945678711,
+      "english_status": "GOOD",
+      "bangla_status": "GOOD",
+      "status": "GOOD"
+    },
+    {
+      "test": "prompt_optimization",
+      "success": true,
+      "time": 0.03452134132385254,
+      "original_length": 2688,
+      "optimized_length": 691,
+      "reduction_percent": 74.29315476190477,
+      "status": "GOOD"
+    },
+    {
+      "test": "end_to_end_performance",
+      "success": true,
+      "average_time": 5.331228542327881,
+      "success_rate": 1.0,
+      "total_queries": 5,
+      "successful_queries": 5,
+      "query_results": [
+        {
+          "query": "What is an algorithm?",
+          "time": 6.069791793823242,
+          "success": true,
+          "answer_length": 533,
+          "sources": 3
+        },
+        {
+          "query": "How does sorting work?",
+          "time": 5.293201684951782,
+          "success": true,
+          "answer_length": 554,
+          "sources": 3
+        },
+        {
+          "query": "Explain binary search",
+          "time": 5.152618646621704,
+          "success": true,
+          "answer_length": 481,
+          "sources": 3
+        },
+        {
+          "query": "\u0985\u09cd\u09af\u09be\u09b2\u0997\u09b0\u09bf\u09a6\u09ae \u0995\u09bf?",
+          "time": 5.209023714065552,
+          "success": true,
+          "answer_length": 83,
+          "sources": 3
+        },
+        {
+          "query": "What is data structure?",
+          "time": 4.931506872177124,
+          "success": true,
+          "answer_length": 452,
+          "sources": 3
+        }
+      ],
+      "status": "SLOW"
+    },
+    {
+      "test": "functionality_verification",
+      "success": true,
+      "passed_tests": 3,
+      "total_tests": 4,
+      "functionality_score": 0.75,
+      "status": "PARTIAL"
+    },
+    {
+      "test": "error_handling",
+      "success": true,
+      "passed_error_tests": 2,
+      "total_error_tests": 3,
+      "status": "PARTIAL"
+    },
+    {
+      "test": "cache_performance",
+      "success": true,
+      "first_query_time": 0.00010752677917480469,
+      "second_query_time": 8.487701416015625e-05,
+      "cache_improvement": 21.06430155210643,
+      "status": "GOOD"
+    }
+  ],
+  "errors": [],
+  "summary": {
+    "total_tests": 8,
+    "successful_tests": 8,
+    "success_rate": 1.0
+  }
+}
