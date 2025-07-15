@@ -1,2 +1,4 @@
+create a virtual envrionment in venv
+install the requirements.txt in venv
 activate : venv\Scripts\Activate.ps1
 
