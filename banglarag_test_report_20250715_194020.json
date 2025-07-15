@@ -1,0 +1,466 @@
+{
+  "test_summary": {
+    "timestamp": "2025-07-15T19:40:20.855244",
+    "total_tests": 23,
+    "passed": 17,
+    "failed": 6,
+    "pass_rate": 73.91,
+    "average_response_time": 7.31,
+    "language_breakdown": {
+      "english": {
+        "total": 12,
+        "passed": 8,
+        "pass_rate": 66.67
+      },
+      "bangla": {
+        "total": 11,
+        "passed": 9,
+        "pass_rate": 81.82
+      }
+    },
+    "confidence_distribution": {
+      "HIGH": 17,
+      "MEDIUM": 0,
+      "LOW": 0
+    }
+  },
+  "detailed_results": [
+    {
+      "test_id": "algo_001_en",
+      "question": "What is an algorithm?",
+      "expected_answer": "A finite sequence of instructions for solving a problem or computational procedure",
+      "actual_answer": "An algorithm is a set of instructions or procedures that are used to solve a specific problem or perform a particular task. It is a step-by-step procedure for solving a problem, and it can be written in any programming language. Algorithms are used in various fields such as mathematics, computer science, engineering, and business to solve complex problems. They are essential for developing software applications, automating processes, and making decisions in decision-making systems.",
+      "success": true,
+      "equivalent": true,
+      "confidence": "HIGH",
+      "explanation": "Both answers describe an algorithm as a sequence of instructions for solving problems or performing tasks. The actual answer provides additional context about the use of algorithms in various fields and their importance, which aligns with the expected answer's core concept that an algorithm is a finite sequence of instructions for solving a problem. The factual information about algorithms being used in different fields and their role in software development, automation, and decision-making systems is consistent with the expected answer's implication of solving specific problems or tasks. The answers are semantically equivalent as they convey the same meaning, despite minor differences in wording and potential language variations (English/Bangla).",
+      "response_time": 7.908211946487427,
+      "sources_found": 3,
+      "model_used": "qwen2:1.5b",
+      "source_pages": [
+        25,
+        23,
+        34
+      ],
+      "language": "english"
+    },
+    {
+      "test_id": "sort_001_en",
+      "question": "How does merge sort work?",
+      "expected_answer": "Merge sort divides array into halves, recursively sorts them, then merges sorted halves",
+      "actual_answer": "Merge sort is a divide-and-conquer algorithm that recursively divides the input array into smaller subarrays, sorts them individually, and then merges them back together. The process involves repeatedly splitting the array into two halves until each half contains only one element. Then, it merges these halves by comparing elements and placing them in the correct order. This process is repeated until the entire array is sorted.",
+      "success": true,
+      "equivalent": true,
+      "confidence": "HIGH",
+      "explanation": "Both answers describe the core process of merge sort, which is a divide-and-conquer algorithm. They both mention that the array is divided into halves and sorted recursively before being merged back together. The actual answer provides a more detailed description of the process, but it does not change the fundamental meaning conveyed in the expected answer. Both answers are consistent with each other factually and semantically, despite potential differences in language or wording.",
+      "response_time": 5.419931888580322,
+      "sources_found": 3,
+      "model_used": "qwen2:1.5b",
+      "source_pages": [
+        50,
+        36,
+        60
+      ],
+      "language": "english"
+    },
+    {
+      "test_id": "complexity_001_en",
+      "question": "What is the time complexity of quicksort?",
+      "expected_answer": "Average case O(n log n), worst case O(n²)",
+      "actual_answer": "The time complexity of quicksort is O(n log n).",
+      "success": true,
+      "equivalent": false,
+      "confidence": "HIGH",
+      "explanation": "The expected answer provides a range of time complexities for the quicksort algorithm, specifically mentioning both average and worst-case scenarios. In contrast, the actual answer only mentions the average case complexity without addressing the worst-case scenario as specified in the expected answer. Although both answers discuss quicksort' extraneous time complexities, they do not convey the same key concepts due to this discrepancy.",
+      "response_time": 3.41916823387146,
+      "sources_found": 3,
+      "model_used": "qwen2:1.5b",
+      "source_pages": [
+        190,
+        200,
+        201
+      ],
+      "language": "english"
+    },
+    {
+      "test_id": "ds_001_en",
+      "question": "What is a binary search tree?",
+      "expected_answer": "A binary tree where left subtree values are less than node, right subtree values are greater",
+      "actual_answer": "A binary search tree is a type of tree data structure where the nodes are organized in a way that allows for efficient searching, insertion, and deletion operations. In a binary search tree, each node has at most two children, with the root node having no children. The left child of a node contains values less than the node's value, and the right child contains values greater than the node's value. This property allows for efficient searching, insertion, and deletion operations in a binary search tree.",
+      "success": true,
+      "equivalent": true,
+      "confidence": "HIGH",
+      "explanation": "Both answers describe the same core concept of a binary search tree, where left subtree values are less than the node's value and right subtree values are greater. The expected answer succinctly captures this essence, while the actual answer provides additional context about the efficiency of operations in a binary search tree and mentions that each node can have at most two children with the root being an exception. Despite these extra details, both answers convey the same fundamental meaning about binary search trees' structure and properties. The factual information is consistent between the two answers, and while there are minor differences in wording, they do not affect the semantic equivalence of the core concept being communicated. The fact that both answers could be in different languages does not impact their cross-language consistency as they convey the same meaning.",
+      "response_time": 6.225477933883667,
+      "sources_found": 3,
+      "model_used": "qwen2:1.5b",
+      "source_pages": [
+        307,
+        306,
+        309
+      ],
+      "language": "english"
+    },
+    {
+      "test_id": "dp_001_en",
+      "question": "What is dynamic programming?",
+      "expected_answer": "An algorithmic technique that solves problems by breaking them into overlapping subproblems",
+      "actual_answer": "Dynamic programming, like the divide-and-conquer method, solves problems by combining the solutions to subproblems.",
+      "success": true,
+      "equivalent": false,
+      "confidence": "HIGH",
+      "explanation": "The expected answer describes a characteristic of dynamic programming, which is the breaking down of problems into overlapping subproblems and solving them independently. However, the actual answer incorrectly states that dynamic programming combines solutions to subproblems, which is more characteristic of a divide-and-conquer approach. The two methods are distinct in their strategies for problem-solving within the context of RAG systems, and thus do not convey the same core information and meaning.",
+      "response_time": 3.8019371032714844,
+      "sources_found": 3,
+      "model_used": "qwen2:1.5b",
+      "source_pages": [
+        379,
+        379,
+        399
+      ],
+      "language": "english"
+    },
+    {
+      "test_id": "algo_001_bn",
+      "question": "অ্যালগরিদম কি?",
+      "expected_answer": "অ্যালগরিদম হল একটি সমস্যা সমাধানের জন্য নির্দিষ্ট নির্দেশাবলীর একটি ক্রম",
+      "actual_answer": "অ্যালগরিদম একটি প্রযুক্তিগত সংজ্ঞা, যা কাজের উন্নতি বা প্রক্রিয়ার সম্ভাবনা বা উপায়গুলির প্রতিফলন করে। এটি বিভিন্ন সমস্যাগুলি সমাধান করার জন্য ব্যবহৃত হয়।",
+      "success": true,
+      "equivalent": true,
+      "confidence": "HIGH",
+      "explanation": "Both answers describe an integrated team as a distinct unit within the context of a collective response. The first answer in Bangla emphasizes the role of such a team in coordinating responses, while the second one highlights its importance for enhancing effectiveness and coordination among various stakeholders. Despite differences in wording and structure, both convey the same essential meaning about the significance of an integrated team within a collective response framework. The Bangla answer also touches on aspects like effectiveness, coordination, and stakeholder involvement which are implicit in the English version's focus on coordinating responses. The core concept of an integrated team as a distinct unit is consistent across both answers, and minor differences in wording do not alter the fundamental message. Cross-language consistency is maintained with appropriate translation of key terms related to team integration within a collect",
+      "response_time": 9.026509761810303,
+      "sources_found": 3,
+      "model_used": "qwen2:1.5b",
+      "source_pages": [
+        25,
+        23,
+        34
+      ],
+      "language": "bangla"
+    },
+    {
+      "test_id": "sort_001_bn",
+      "question": "মার্জ সর্ট কিভাবে কাজ করে?",
+      "expected_answer": "মার্জ সর্ট অ্যারেকে অংশে ভাগ করে, প্রতিটি অংশ আলাদাভাবে সাজায়, তারপর সেগুলো একত্রিত করে",
+      "actual_answer": "মার্জ সর্ট একটি প্রোগ্রাম করে যা বিভিন্ন সংখ্যাগুলির উপর একটি সংখ্যা প্রতিষ্ঠানের জন্য বিভিন্ন সংখ্যা সংগুলি প্রতিষ্ঠানের জন্য বিভিন্ন সংখ্যা সংগুলি সংগুলি সংগুলি সং",
+      "success": true,
+      "equivalent": true,
+      "confidence": "HIGH",
+      "explanation": "Both answers describe the same process of Marjan Shah's program, where each sub-process is executed in parallel and then communicates with one another. The core information about the concurrent execution and communication between processes remains consistent across both answers, despite differences in language and wording.",
+      "response_time": 10.138347148895264,
+      "sources_found": 3,
+      "model_used": "qwen2:1.5b",
+      "source_pages": [
+        50,
+        36,
+        54
+      ],
+      "language": "bangla"
+    },
+    {
+      "test_id": "complexity_001_bn",
+      "question": "কুইকসর্টের সময় জটিলতা কত?",
+      "expected_answer": "গড় ক্ষেত্রে O(n log n), সবচেয়ে খারাপ ক্ষেত্রে O(n²)",
+      "actual_answer": "কুইকসর্টের সময় জটিলতা ।n2/ হলে।",
+      "success": true,
+      "equivalent": false,
+      "confidence": "LOW",
+      "explanation": "The expected answer clearly states the time complexities of two algorithms, O(n log n) and O(n²), which are key concepts in algorithm analysis. The actual answer, while it does mention time complexity (n²), lacks the specificity and clarity of the expected answer. It also uses a different language structure that may not be as immediately understandable to an English speaker, which could lead to misinterpretation of the meaning. The actual answer does not explicitly mention O(n log n), and it seems to be a fragmented sentence that doesn't fully convey the same information as the expected answer.",
+      "response_time": 4.474604606628418,
+      "sources_found": 3,
+      "model_used": "qwen2:1.5b",
+      "source_pages": [
+        210,
+        201,
+        190
+      ],
+      "language": "bangla"
+    },
+    {
+      "test_id": "ds_001_bn",
+      "question": "বাইনারি সার্চ ট্রি কি?",
+      "expected_answer": "একটি বাইনারি ট্রি যেখানে বাম সাবট্রিতে ছোট মান এবং ডান সাবট্রিতে বড় মান থাকে",
+      "actual_answer": "বাইনারি সার্চ ট্রি (Binary Search Tree) একটি প্রতিটি উপাদানের সার্চ করার জন্য একটি প্রতিটি উপাদানের সার্চ করা যোগ্য একটি ট্রিকে বিভাজন করা হয়। এটি সার্চ করার জন্য উপাদানগুলির সার্চ করা হয়। এ",
+      "success": true,
+      "equivalent": false,
+      "confidence": "LOW",
+      "explanation": "Failed to get evaluation from judge model",
+      "response_time": 9.095022678375244,
+      "sources_found": 3,
+      "model_used": "qwen2:1.5b",
+      "source_pages": [
+        307,
+        306,
+        309
+      ],
+      "language": "bangla"
+    },
+    {
+      "test_id": "dp_001_bn",
+      "question": "ডাইনামিক প্রোগ্রামিং কি?",
+      "expected_answer": "একটি অ্যালগরিদমিক পদ্ধতি যা সমস্যাকে ছোট উপ-সমস্যায় ভাগ করে সমাধান করে",
+      "actual_answer": "ডাইনামিক প্রোগ্রামিং, বিশেষ করে দিন এবং সাধারণ প্রোগ্রামিং, কাজ করে বিভিন্ন সমস্যা সম্পর্কিত উপাদানগুলি বিভাগ করে। এটি সমস্যা সম্পর্কিত উপাদানগুলি বিভাগ করে এবং সমস্যা সম্পর্",
+      "success": true,
+      "equivalent": true,
+      "confidence": "HIGH",
+      "explanation": "Both answers describe a multilingual approach to handling small-scale societal issues through specialized programs. The first answer is in Bangla, while the second one is in English but conveys a similar meaning about addressing societal issues through specialized programs. The core information and intent behind both answers are consistent, even though the wording differs slightly due to language differences.",
+      "response_time": 9.463947296142578,
+      "sources_found": 3,
+      "model_used": "qwen2:1.5b",
+      "source_pages": [
+        379,
+        379,
+        399
+      ],
+      "language": "bangla"
+    },
+    {
+      "test_id": "textbook_001_en",
+      "question": "What is asymptotic notation?",
+      "expected_answer": "Mathematical notation used to describe the limiting behavior of functions, commonly used for algorithm analysis",
+      "actual_answer": "Asymptotic notation is a way of expressing functions or expressions that indicate what variable is approaching infinity. It involves using symbols such as \"g.n.\" to denote asymptotic growth, indicating that the function or expression is growing at a rate that is not immediately obvious. This notation is commonly used in mathematics and computer science to simplify and analyze complex functions.",
+      "success": true,
+      "equivalent": true,
+      "confidence": "HIGH",
+      "explanation": "Both answers address the concept of asymptotic notation, which is used to describe the behavior of functions as they approach infinity. The expected answer focuses on its use in algorithm analysis, while the actual answer provides more detail about how it expresses growth rates and uses symbols like \"g.n.\" for asymptotic growth. Despite slight differences in wording, the core information is consistent across both answers. The factual content regarding the purpose and application of asymptotic notation in mathematics and computer science remains unchanged. Both answers convey the same meaning, with only minor differences in language style or detail level. Therefore, they are semantically equivalent.",
+      "response_time": 5.989802122116089,
+      "sources_found": 3,
+      "model_used": "qwen2:1.5b",
+      "source_pages": [
+        64,
+        67,
+        65
+      ],
+      "language": "english"
+    },
+    {
+      "test_id": "textbook_001_bn",
+      "question": "অ্যাসিম্পটোটিক নোটেশন কি?",
+      "expected_answer": "ফাংশনের সীমাবদ্ধতা বর্ণনার জন্য ব্যবহৃত গাণিতিক নোটেশন যা অ্যালগরিদম বিশ্লেষণে ব্যবহৃত হয়",
+      "actual_answer": "অ্যাসিম্পটোটিক নোটেশন একটি বিশ্লেষণ বা পরিমাণের উপর ভিত্তি করে সংখ্যার বৃদ্ধি এবং পরিবর্তনের সম্পর্কে নোটেশন। এটি বিশ্লেষণ বা পরিমাণের উপর ভিত্তি করে সংখ্যার বৃদ্ধি এবং পর",
+      "success": true,
+      "equivalent": true,
+      "confidence": "HIGH",
+      "explanation": "Both answers address the core concept of a function's scope and its relationship with notations in algebra. The first answer is in Bangla, while the second one is in English but conveys a similar meaning about how notation serves as an intermediary between abstract concepts and concrete representations. Despite differences in language, the essence of the information is consistent across both answers.",
+      "response_time": 9.167755365371704,
+      "sources_found": 3,
+      "model_used": "qwen2:1.5b",
+      "source_pages": [
+        65,
+        64,
+        67
+      ],
+      "language": "bangla"
+    },
+    {
+      "test_id": "heap_001_en",
+      "question": "How do you maintain the heap property?",
+      "expected_answer": "Use heapify operations to ensure parent nodes satisfy heap property relative to children",
+      "actual_answer": "To maintain the heap property, we need to ensure that each iteration of the loop maintains the loop invariant. This means that the children of the current node are numbered higher than the current node itself, and we can exchange it with the last element in the heap if necessary.",
+      "success": true,
+      "equivalent": false,
+      "confidence": "HIGH",
+      "explanation": "The expected answer focuses on the use of heapify operations to ensure that parent nodes are not greater than their children, which is a direct way to maintain the heap property. The actual answer discusses loop invariants and exchanges within the heapify process but does not explicitly mention that parent nodes should be less than their children, which is a key concept in maintaining the heap property. While both answers discuss mechanisms to ensure the heap property, they do not convey exactly the same information and meaning due to this discrepinancies in detailing how parent nodes should be ordered relative to their children.",
+      "response_time": 4.691904783248901,
+      "sources_found": 3,
+      "model_used": "qwen2:1.5b",
+      "source_pages": [
+        171,
+        177,
+        180
+      ],
+      "language": "english"
+    },
+    {
+      "test_id": "heap_001_bn",
+      "question": "হিপ প্রপার্টি কিভাবে বজায় রাখা হয়?",
+      "expected_answer": "হিপিফাই অপারেশন ব্যবহার করে প্যারেন্ট নোড এবং চাইল্ড নোডের মধ্যে হিপ প্রপার্টি বজায় রাখা হয়",
+      "actual_answer": "হিপ প্রপার্টি বিশেষ একটি সমস্যা হিসেবে প্রযুক্তি বিশ্লেষণের জন্য ব্যবহার করা হয়। এটি সমস্ত প্রতিটি উপাদানের বিভিন্ন অংশগুলি একটি সম্পূর্ণ উপাদানে বিভাজন করা হয়। এটি সমস্ত উ",
+      "success": true,
+      "equivalent": true,
+      "confidence": "HIGH",
+      "explanation": "Both answers discuss the use of hybrid models in RAG systems, specifically mentioning how they integrate physical and digital data. The first answer is in Bangla while the second one is in English but both convey the same core information about hybrid RAG systems, their purpose, and how they function. The key concepts of using physical data alongside digital data in a single model are consistent across both answers. Minor differences in wording do not affect the overall meaning, and despite being in different languages, they maintain semantic equivalence.",
+      "response_time": 10.2676682472229,
+      "sources_found": 3,
+      "model_used": "qwen2:1.5b",
+      "source_pages": [
+        758,
+        756,
+        1111
+      ],
+      "language": "bangla"
+    },
+    {
+      "test_id": "graph_001_en",
+      "question": "What is Dijkstra's algorithm used for?",
+      "expected_answer": "Finding shortest paths from a source vertex to all other vertices in weighted graphs",
+      "actual_answer": "Dijkstra's algorithm is used to find the shortest path between two nodes in a graph. It is particularly useful for finding the shortest path in a weighted graph, where each edge has a weight associated with it.",
+      "success": true,
+      "equivalent": true,
+      "confidence": "HIGH",
+      "explanation": "Both answers address the concept of finding shortest paths in a weighted graph, which is central to Dijkstra'th algorithm. The actual answer provides additional context about the specific use case of finding shortest paths between two nodes and mentions that it is particularly useful for weighted graphs, which aligns with the expected answer's focus on \"from a source vertex to all other vertices.\" The core information and meaning are consistent across both answers. Minor differences in wording do not affect the semantic equivalence, as they describe essentially the same process. Both answers could be in different languages but convey the same meaning, which is consistent with cross-language evaluation criteria.",
+      "response_time": 4.964068174362183,
+      "sources_found": 3,
+      "model_used": "qwen2:1.5b",
+      "source_pages": [
+        679,
+        723,
+        682
+      ],
+      "language": "english"
+    },
+    {
+      "test_id": "graph_001_bn",
+      "question": "ডাইজস্ট্রার অ্যালগরিদম কি জন্য ব্যবহৃত হয়?",
+      "expected_answer": "ওজনযুক্ত গ্রাফে একটি উৎস থেকে অন্যান্য সব শীর্ষে সবচেয়ে ছোট পথ খুঁজে বের করার জন্য",
+      "actual_answer": "ডাইজস্ট্রার অ্যালগরিদম বিভিন্ন সময় ব্যবহৃত হয়, কিন্তু এটি সাধারণতা বিশ্লেষণ এবং প্রতিটি নিউটন সাধারণ অ্যালগরিদমের একটি উদাহরণ। এটি সাধারণতা বিশ্লেষণ করে একটি সমস্যার সমাধান",
+      "success": true,
+      "equivalent": true,
+      "confidence": "HIGH",
+      "explanation": "Both answers discuss the concept of a diverse team working together in various sectors. The first answer is in Bangla, while the second one is in English but both convey the same idea that diversity within a team can lead to comprehensive solutions and represents an ordinary example of such a setup. The core message about the benefits of diverse teams in different sectors is consistent across both answers, despite differences in language and some wording variations.",
+      "response_time": 10.772906303405762,
+      "sources_found": 3,
+      "model_used": "qwen2:1.5b",
+      "source_pages": [
+        723,
+        679,
+        682
+      ],
+      "language": "bangla"
+    },
+    {
+      "test_id": "advanced_001_en",
+      "question": "What is the master theorem?",
+      "expected_answer": "A method for solving recurrence relations commonly found in divide-and-conquer algorithms",
+      "actual_answer": "The master theorem is a technique used in algorithm analysis to determine the time complexity of an algorithm. It states that if an algorithm can be expressed as a recurrence relation of the form T(n) = f (T(n/2), n/2) + g(n), where f and g are functions, then the time complexity of the algorithm is O(f(n)).\n\nThe master theorem applies when the recurrence relation can be reduced to a form that allows for a simple analysis. It provides a way to determine the time complexity of an algorithm by analyzing the complexity of its subproblems and using a specific formula to relate the time complexity of the original problem to the time complexities of its subproblems.",
+      "success": true,
+      "equivalent": false,
+      "confidence": "HIGH",
+      "explanation": "The expected answer focuses on a method for solving recurrence relations in divide-and-conquer algorithms, while the actual answer discusses the master theorem and its application to algorithm analysis. Although both answers touch upon recurrence relations in some way, they address different aspects of the topic. The expected answer is about solving recurrence relations, while the actual answer is more about analyzing them using a specific theorem. Therefore, they do not convey the same core information and meaning.",
+      "response_time": 7.247118949890137,
+      "sources_found": 3,
+      "model_used": "qwen2:1.5b",
+      "source_pages": [
+        117,
+        126,
+        114
+      ],
+      "language": "english"
+    },
+    {
+      "test_id": "advanced_001_bn",
+      "question": "মাস্টার থিওরেম কি?",
+      "expected_answer": "ডিভাইড অ্যান্ড কনকার অ্যালগরিদমে পাওয়া রিকারেন্স রিলেশন সমাধানের একটি পদ্ধতি",
+      "actual_answer": "মাস্টার থিওরেম একটি প্রতিটিকে বিশ্লেষণ করার জন্য একটি সাধারণ প্রতিটিকে বিশ্লেষণ করা যেতে পারে। এটি সম্পূর্ণ বিশ্লেষণ করা যায় এবং সমস্ত প্রতিটি বিশ্লেষণের উপর একটি সাধারণ প্রতিট",
+      "success": true,
+      "equivalent": true,
+      "confidence": "HIGH",
+      "explanation": "Both answers discuss the concept of a bilateral agreement between two countries, which is intended to resolve disputes. The first answer in Bangla and the second one in English convey similar meanings despite differences in language structure and wording, maintaining factual consistency about the purpose of such an agreement. The core information is effectively communicated in both versions, with only minor differences that do not alter the overall meaning.",
+      "response_time": 9.250541925430298,
+      "sources_found": 3,
+      "model_used": "qwen2:1.5b",
+      "source_pages": [
+        117,
+        126,
+        117
+      ],
+      "language": "bangla"
+    },
+    {
+      "test_id": "complexity_002_en",
+      "question": "What is NP-completeness?",
+      "expected_answer": "A class of computational problems that are among the most difficult problems in NP",
+      "actual_answer": "NP-completeness is a class of problems in computational complexity theory that are known to be at least as difficult as the hardest problems in NP, which is the set of all decision problems for which there exists a polynomial-time algorithm that always returns the correct answer. This means that if a problem can be solved in polynomial time, then it is in NP, and if a problem is in NP, then it is NP-complete. The class NP-completeness was introduced by Garey and Johnson in 1979 as a way to classify problems that are at least as hard as the hardest problems in NP. It is an important concept in computer science, as it provides a framework for understanding the limits of computational resources and the power of algorithms.",
+      "success": true,
+      "equivalent": true,
+      "confidence": "HIGH",
+      "explanation": "Both answers address the concept of NP-completeness, which is a class of problems that are among the most difficult in NP. The expected answer succinctly describes this concept without going into detail about its history or implications, while the actual answer provides a more comprehensive explanation of NP-completeness. Despite these differences in depth and breadth, both answers convey the same core information about what NP-completeness is. The factual information regarding the definition of NP-completeness and its significance in computational complexity theory is consistent between both answers. Minor differences in wording do not affect the semantic equivalence, as both are discussing NP-completeness and its role within computational complexity theory. The fact that answers may be in different languages does not impact the consistency of their meaning, as long as they convey the same",
+      "response_time": 8.852999687194824,
+      "sources_found": 3,
+      "model_used": "qwen2:1.5b",
+      "source_pages": [
+        1070,
+        1090,
+        1087
+      ],
+      "language": "english"
+    },
+    {
+      "test_id": "complexity_002_bn",
+      "question": "NP-completeness কি?",
+      "expected_answer": "NP-তে সবচেয়ে কঠিন সমস্যাগুলোর একটি শ্রেণি যা গণনাগত জটিলতার ক্ষেত্রে গুরুত্বপূর্ণ",
+      "actual_answer": "NP-completeness is a complexity class in computer science that represents the hardest problems in computational complexity theory. It includes all problems that can be solved by a deterministic Turing machine in polynomial time, assuming the existence of an efficient algorithm for the problem. Problems in NP-completeness are considered to be among the most difficult problems in computational complexity theory, and they are often used as benchmarks for evaluating the efficiency of algorithms.",
+      "success": true,
+      "equivalent": true,
+      "confidence": "HIGH",
+      "explanation": "Both answers discuss the concept of NP-completeness, which is a central topic in computational complexity theory. The expected answer uses Bangla to describe that NP-complete problems are the most difficult ones within this field and serve as benchmarks for algorithm efficiency, which is essentially what the actual answer conveys in English. The core information about NP-completeness being a class of problems that are hard to solve and serve as benchmarks for algorithm efficiency is consistent between both answers. Minor differences in wording do not affect the conveyed meaning, and despite being in different languages, they are semantically equivalent.",
+      "response_time": 6.205646276473999,
+      "sources_found": 3,
+      "model_used": "qwen2:1.5b",
+      "source_pages": [
+        1090,
+        1070,
+        1084
+      ],
+      "language": "bangla"
+    },
+    {
+      "test_id": "negative_001_en",
+      "question": "How do I cook pasta?",
+      "expected_answer": "No relevant information found",
+      "actual_answer": "To cook pasta, you need to follow these steps:\n\n1. Fill a large pot with water and bring it to a boil.\n2. Add the pasta to the boiling water and stir gently.\n3. Cook the pasta according to the package instructions, usually about 8-10 minutes.\n4. Once cooked, drain the pasta and set it aside.\n5. In a separate pan, heat some oil or butter over medium heat.\n6. Add your desired sauce (e.g., tomato sauce, Alfredo sauce, etc.) and let it simmer for a few minutes.\n7. Add the cooked pasta to the pan with the sauce and toss everything together until the pasta is well coated.\n8. Season with salt, pepper, or any other desired spices.\n9. Serve hot and enjoy your delicious pasta dish!",
+      "success": true,
+      "equivalent": true,
+      "confidence": "HIGH",
+      "explanation": "Both answers provide the same core information and meaning about how to cook pasta. They outline a similar process, including boiling water, adding pasta, draining it, preparing the sauce separately, combining them, and seasoning. The only difference is that one answer provides a more detailed description of each step, but this does not change the overall meaning or information conveyed. Both answers are in English and Bangla, which should be considered equivalent if translated accurately.",
+      "response_time": 8.781010627746582,
+      "sources_found": 3,
+      "model_used": "qwen2:1.5b",
+      "source_pages": [
+        1074,
+        133,
+        1002
+      ],
+      "language": "english"
+    },
+    {
+      "test_id": "negative_001_bn",
+      "question": "আমি কিভাবে পাস্তা রান্না করব?",
+      "expected_answer": "কোন প্রাসঙ্গিক তথ্য পাওয়া যায়নি",
+      "actual_answer": "পাস্তা রান্না করার জন্য আপনি একটি পাস্তা বিভাগ চালানোর জন্য একটি পাস্তা বিভাগ চালানোর জন্য একটি পাস্তা বিভাগ চালানোর জন্য একটি পাস্তা বিভাগ চালানোর জন্য একটি পাস্তা বিভাগ চালান",
+      "success": true,
+      "equivalent": true,
+      "confidence": "HIGH",
+      "explanation": "Both the expected and actual answers are semantically equivalent, as they convey the same core message about promoting a culture of respect among peers. The factual information is consistent between both answers. Although there are minor differences in wording, the meaning remains unchanged across languages (English and Bangla). Cross-language consistency is maintained as both answers effectively communicate the same idea.",
+      "response_time": 8.330031394958496,
+      "sources_found": 3,
+      "model_used": "qwen2:1.5b",
+      "source_pages": [
+        1074,
+        133,
+        1002
+      ],
+      "language": "bangla"
+    },
+    {
+      "test_id": "negative_002_en",
+      "question": "What is the weather today?",
+      "expected_answer": "No relevant information found",
+      "actual_answer": "I'm sorry, but I cannot answer this question as I am an AI language model and do not have access to current weather information. Please check a reliable source for the current weather conditions.",
+      "success": true,
+      "equivalent": true,
+      "confidence": "HIGH",
+      "explanation": "Both answers effectively communicate that the system lacks access to current weather information and cannot provide an answer. The actual answer specifies a source for checking the weather, which is not present in the expected answer but does not detract from the core message that no relevant information can be provided. Both answers are semantically equivalent, and while they may differ slightly in wording or detail, they convey the same essential meaning. The confidence level is high because both answers clearly express that no relevant information can be provided by the system regarding current weather conditions.",
+      "response_time": 4.602940320968628,
+      "sources_found": 3,
+      "model_used": "qwen2:1.5b",
+      "source_pages": [
+        609,
+        169,
+        614
+      ],
+      "language": "english"
+    }
+  ]
+}
