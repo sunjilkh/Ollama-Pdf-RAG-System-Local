@@ -30,9 +30,9 @@ def main():
     print(
         '2. 💬 Direct Chat Session       → python -c "from ollama_llm import interactive_rag_session; interactive_rag_session()"'
     )
-    print("3. 🧪 Test Optimized System     → python test_optimized_system.py")
+    print("3. 📊 Test Suite & Benchmarks   → python test_rag.py")
     print("4. 🎤 Voice Input Session       → python voice_input.py --interactive")
-    print("5. 📊 Quick Test Suite          → python test_rag.py")
+    print("5. 🎙️  Single Voice Query       → python voice_input.py")
     print("6. 🔧 This Launcher             → python launch.py")
 
     print("\n🎯 RECOMMENDED FOR DAILY USE:")
@@ -52,11 +52,11 @@ def main():
 
         interactive_rag_session()
     elif choice == "3":
-        os.system("python test_optimized_system.py")
+        os.system("python test_rag.py")
     elif choice == "4":
         os.system("python voice_input.py --interactive")
     elif choice == "5":
-        os.system("python test_rag.py")
+        os.system("python voice_input.py")
     elif choice == "6":
         print("🔄 Restarting launcher...")
         main()

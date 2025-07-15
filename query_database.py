@@ -1,11 +1,183 @@
 from langchain_chroma import Chroma
 from embedding import get_embedding_function_with_fallback
 import os
+import time
+import threading
+from typing import Optional, List, Dict, Any
+from functools import lru_cache
+from config import DATABASE_DIRECTORY, RETRIEVAL_COUNT
+import chromadb
+
+
+class OptimizedDatabaseManager:
+    """Singleton database manager with caching and optimization"""
+
+    _instance = None
+    _lock = threading.Lock()
+
+    def __new__(cls):
+        if cls._instance is None:
+            with cls._lock:
+                if cls._instance is None:
+                    cls._instance = super(OptimizedDatabaseManager, cls).__new__(cls)
+        return cls._instance
+
+    def __init__(self):
+        if not hasattr(self, "initialized"):
+            self.initialized = True
+            self.db_cache = None
+            self.embedding_function = None
+            self.persist_directory = DATABASE_DIRECTORY
+            self.query_cache = {}
+            self.cache_hits = 0
+            self.cache_misses = 0
+            self._preload_database()
+
+    def _preload_database(self):
+        """Preload database in background for faster access"""
+
+        def preload():
+            try:
+                print("🔄 Preloading database...")
+                self.get_database()
+                print("✅ Database preloaded successfully")
+            except Exception as e:
+                print(f"⚠️  Database preload failed: {e}")
+
+        # Run preload in background
+        threading.Thread(target=preload, daemon=True).start()
+
+    def get_embedding_function(self):
+        """Get cached embedding function"""
+        if self.embedding_function is None:
+            self.embedding_function = get_embedding_function_with_fallback()
+        return self.embedding_function
+
+    def get_database(self):
+        """Get cached database instance"""
+        if self.db_cache is None:
+            self.db_cache = self._load_database()
+        return self.db_cache
+
+    def _load_database(self):
+        """Load database with optimizations and proper ChromaDB client configuration"""
+        try:
+            if not os.path.exists(self.persist_directory):
+                print(f"Database directory '{self.persist_directory}' does not exist.")
+                return None
+
+            embedding_function = self.get_embedding_function()
+
+            # Create ChromaDB client with proper configuration for newer versions
+            try:
+                # Try with PersistentClient for newer ChromaDB versions
+                client = chromadb.PersistentClient(path=self.persist_directory)
+
+                db = Chroma(
+                    client=client,
+                    embedding_function=embedding_function,
+                )
+
+            except Exception as client_error:
+                print(f"PersistentClient failed: {client_error}")
+                # Fallback to legacy configuration
+                db = Chroma(
+                    persist_directory=self.persist_directory,
+                    embedding_function=embedding_function,
+                )
+
+            # Quick validation
+            data = db.get()
+            if not data["ids"]:
+                print("Database exists but is empty.")
+                return None
+
+            print(f"✅ Database loaded with {len(data['ids'])} documents")
+            return db
+
+        except Exception as e:
+            print(f"❌ Error loading database: {e}")
+            return None
+
+    def query_database_cached(self, query: str, k: int = RETRIEVAL_COUNT) -> List[Any]:
+        """Query database with result caching"""
+
+        # Create cache key
+        cache_key = f"{query}:{k}"
+
+        # Check cache first
+        if cache_key in self.query_cache:
+            self.cache_hits += 1
+            return self.query_cache[cache_key]
+
+        # Cache miss - query database
+        self.cache_misses += 1
+        db = self.get_database()
+
+        if db is None:
+            return []
+
+        try:
+            # Optimized similarity search
+            results = db.similarity_search(query, k=k)
+
+            # Cache the results
+            self.query_cache[cache_key] = results
+
+            # Limit cache size
+            if len(self.query_cache) > 200:
+                # Remove oldest entries
+                oldest_key = next(iter(self.query_cache))
+                del self.query_cache[oldest_key]
+
+            return results
+
+        except Exception as e:
+            print(f"❌ Error querying database: {e}")
+            return []
+
+    def get_cache_stats(self) -> Dict[str, Any]:
+        """Get cache performance statistics"""
+        total_queries = self.cache_hits + self.cache_misses
+        hit_rate = self.cache_hits / total_queries if total_queries > 0 else 0
+
+        return {
+            "cache_hits": self.cache_hits,
+            "cache_misses": self.cache_misses,
+            "hit_rate": hit_rate,
+            "cache_size": len(self.query_cache),
+        }
+
+    def clear_cache(self):
+        """Clear all caches"""
+        self.query_cache.clear()
+        self.cache_hits = 0
+        self.cache_misses = 0
+        print("🧹 Cache cleared")
+
+    def warmup_cache(self):
+        """Warm up cache with common queries"""
+        common_queries = [
+            "algorithm",
+            "sorting",
+            "data structure",
+            "binary search",
+            "complexity",
+        ]
+
+        for query in common_queries:
+            self.query_database_cached(query, k=3)
+
+        print(f"🔥 Cache warmed up with {len(common_queries)} common queries")
+
+
+# Global optimized database manager instance
+db_manager = OptimizedDatabaseManager()
 
 
 def load_database(persist_directory="db"):
     """
-    Load existing ChromaDB vector database.
+    Load existing ChromaDB vector database using optimized manager.
 
     Args:
         persist_directory: Directory where database is persisted
@@ -13,56 +185,30 @@ def load_database(persist_directory="db"):
     Returns:
         ChromaDB vector store instance or None if failed
     """
-    try:
-        if not os.path.exists(persist_directory):
-            print(f"Database directory '{persist_directory}' does not exist.")
-            print("Please run create_database.py first to create the vector database.")
-            return None
-
-        embedding_function = get_embedding_function_with_fallback()
-        db = Chroma(
-            persist_directory=persist_directory, embedding_function=embedding_function
-        )
-
-        # Test if database has content
-        data = db.get()
-        if not data["ids"]:
-            print("Database exists but is empty.")
-            return None
-
-        print(f"✅ Database loaded successfully with {len(data['ids'])} documents")
-        return db
-
-    except Exception as e:
-        print(f"❌ Error loading database: {e}")
-        return None
+    return db_manager.get_database()
 
 
-def query_database(db, query, k=5):
+def query_database(db, query, k=RETRIEVAL_COUNT):
     """
-    Query the vector database and return relevant documents.
+    Query the vector database and return relevant documents using optimized caching.
 
     Args:
-        db: ChromaDB vector store instance
+        db: ChromaDB vector store instance (can be None, will use optimized manager)
         query: Search query string
         k: Number of documents to retrieve
 
     Returns:
         List of relevant document chunks
     """
-    if db is None:
-        print("Database is not available")
-        return []
+    # Use optimized cached query
+    results = db_manager.query_database_cached(query, k=k)
 
-    try:
-        # Search for relevant documents
-        results = db.similarity_search(query, k=k)
+    if results:
         print(f"Found {len(results)} relevant documents")
-        return results
+    else:
+        print("No relevant documents found")
 
-    except Exception as e:
-        print(f"Error querying database: {e}")
-        return []
+    return results
 
 
 def query_database_with_scores(db, query, k=5):
@@ -114,6 +260,51 @@ def get_citation_info(metadata):
         clean_name = "Unknown Document"
 
     return f"{clean_name}, Page {page_number}"
+
+
+def generate_optimized_prompt_template(query, results, max_context_length=1200):
+    """
+    Generate optimized prompt template with reduced length for faster inference.
+    """
+    if not results:
+        return f"Answer briefly: {query}\n\nAnswer:"
+
+    # Extract only the most essential information
+    contexts = []
+    current_length = 0
+
+    for result in results:
+        content = result.page_content.strip()
+
+        # Extract key sentences (first 150 chars)
+        if len(content) > 150:
+            # Try to find a good breaking point
+            content = content[:150]
+            last_period = content.rfind(".")
+            if last_period > 100:
+                content = content[: last_period + 1]
+            else:
+                content = content + "..."
+
+        # Simple page reference
+        page = result.metadata.get("page", "?")
+        source_info = f"[{page}] {content}"
+
+        if current_length + len(source_info) < max_context_length:
+            contexts.append(source_info)
+            current_length += len(source_info)
+        else:
+            break
+
+    context = "\n".join(contexts)
+
+    # Ultra-concise prompt
+    prompt = f"""Context: {context}
+
+Q: {query}
+A:"""
+
+    return prompt
 
 
 def generate_prompt_template(query, results, max_context_length=4000):

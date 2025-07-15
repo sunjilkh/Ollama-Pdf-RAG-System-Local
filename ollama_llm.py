@@ -1,111 +1,224 @@
 import requests
 import json
 import time
+import threading
+from typing import Dict, Optional, Any
+from functools import lru_cache
 from query_database import load_database, query_database, generate_prompt_template
 from translator import process_query_with_translation
+from config import PREFERRED_MODEL, FALLBACK_MODELS, MAX_TOKENS, TEMPERATURE, TIMEOUT
+
+
+class OptimizedModelManager:
+    """Singleton model manager with caching and optimization"""
+
+    _instance = None
+    _lock = threading.Lock()
+
+    def __new__(cls):
+        if cls._instance is None:
+            with cls._lock:
+                if cls._instance is None:
+                    cls._instance = super(OptimizedModelManager, cls).__new__(cls)
+        return cls._instance
+
+    def __init__(self):
+        if not hasattr(self, "initialized"):
+            self.initialized = True
+            self.base_url = "http://localhost:11434"
+            self.preferred_model = PREFERRED_MODEL
+            self.fallback_models = FALLBACK_MODELS
+            self.model_cache = {}
+            self.available_models = None
+            self.model_warmed_up = False
+            self._warm_up_models()
+
+    def _warm_up_models(self):
+        """Warm up models in background to reduce first-query latency"""
+
+        def warm_up():
+            try:
+                # Test connection and warm up preferred model
+                self.get_available_models()
+                if self.available_models:
+                    # Send a small warm-up query
+                    self.query_ollama_optimized(
+                        "Test",
+                        model=self.preferred_model,
+                        max_tokens=1,
+                        temperature=0.1,
+                    )
+                    self.model_warmed_up = True
+                    print("🔥 Model warm-up completed")
+            except Exception as e:
+                print(f"⚠️  Model warm-up failed: {e}")
+
+        # Run warm-up in background
+        threading.Thread(target=warm_up, daemon=True).start()
+
+    @lru_cache(maxsize=1)
+    def get_available_models(self):
+        """Cache available models list"""
+        try:
+            response = requests.get(f"{self.base_url}/api/tags", timeout=10)
+            if response.status_code == 200:
+                models = response.json()
+                model_names = [model["name"] for model in models.get("models", [])]
+                self.available_models = model_names
+                return model_names
+        except Exception as e:
+            print(f"⚠️  Failed to get available models: {e}")
+        return []
+
+    def query_ollama_optimized(
+        self,
+        prompt: str,
+        model: str = None,
+        max_tokens: int = MAX_TOKENS,
+        temperature: float = TEMPERATURE,
+        timeout: int = TIMEOUT,
+    ) -> Optional[str]:
+        """Optimized Ollama query with reduced parameters for speed"""
+
+        model = model or self.preferred_model
+
+        # Check cache first (for identical prompts)
+        cache_key = f"{model}:{hash(prompt)}:{max_tokens}:{temperature}"
+        if cache_key in self.model_cache:
+            return self.model_cache[cache_key]
+
+        try:
+            url = f"{self.base_url}/api/generate"
+            payload = {
+                "model": model,
+                "prompt": prompt,
+                "stream": False,
+                "options": {
+                    "num_predict": max_tokens,
+                    "temperature": temperature,
+                    "num_ctx": 1536,  # Reduced context window for speed
+                    "repeat_last_n": 32,  # Reduced for speed
+                    "repeat_penalty": 1.05,  # Reduced for speed
+                    "top_k": 20,  # Reduced for speed
+                    "top_p": 0.8,  # Reduced for speed
+                },
+            }
+
+            response = requests.post(url, json=payload, timeout=timeout)
+
+            if response.status_code == 200:
+                result = response.json()
+                answer = result.get("response", "").strip()
+
+                # Cache the result
+                self.model_cache[cache_key] = answer
+
+                # Limit cache size
+                if len(self.model_cache) > 100:
+                    # Remove oldest entries
+                    oldest_key = next(iter(self.model_cache))
+                    del self.model_cache[oldest_key]
+
+                return answer
+            else:
+                print(f"❌ HTTP {response.status_code}: {response.text}")
+                return None
+
+        except requests.exceptions.Timeout:
+            print(f"⏱️  Request timed out after {timeout}s")
+            return None
+        except Exception as e:
+            print(f"❌ Error querying {model}: {e}")
+            return None
+
+    def query_with_smart_fallback(
+        self,
+        prompt: str,
+        max_tokens: int = MAX_TOKENS,
+        temperature: float = TEMPERATURE,
+    ) -> tuple[Optional[str], Optional[str]]:
+        """Smart fallback with optimized parameters"""
+
+        # Get available models
+        available = self.get_available_models()
+        if not available:
+            return None, None
+
+        # Filter models to only available ones
+        models_to_try = [
+            model
+            for model in self.fallback_models
+            if any(model in available_model for available_model in available)
+        ]
+
+        if not models_to_try and available:
+            models_to_try = [available[0]]
+
+        for model in models_to_try:
+            result = self.query_ollama_optimized(
+                prompt, model=model, max_tokens=max_tokens, temperature=temperature
+            )
+
+            if result:
+                return result, model
+
+        return None, None
+
+    def is_connection_healthy(self) -> bool:
+        """Quick health check for Ollama connection"""
+        try:
+            response = requests.get(f"{self.base_url}/api/tags", timeout=5)
+            return response.status_code == 200
+        except:
+            return False
+
+
+# Global optimized model manager instance
+model_manager = OptimizedModelManager()
 
 
 def query_ollama(
     prompt,
-    model="qwen2:1.5b",  # Updated to match optimized system
-    max_tokens=256,  # Reduced from 512
-    temperature=0.3,  # Reduced from 0.7 for faster inference
+    model=PREFERRED_MODEL,  # Updated to use config
+    max_tokens=MAX_TOKENS,  # Updated to use config
+    temperature=TEMPERATURE,  # Updated to use config
     base_url="http://localhost:11434",
 ):
     """
-    Query Ollama API to generate a response.
+    Query Ollama API to generate a response using optimized model manager.
 
-    Args:
-        prompt: The prompt to send to the model
-        model: Model name (e.g., 'phi3', 'mistral', 'codellama')
-        max_tokens: Maximum number of tokens to generate
-        temperature: Sampling temperature (0.0-1.0)
-        base_url: Ollama server URL
-
-    Returns:
-        Generated response text or None if error
+    This function now uses the OptimizedModelManager for improved performance.
     """
-    try:
-        # Ollama API endpoint
-        url = f"{base_url}/api/generate"
-
-        # Request payload with optimized parameters
-        payload = {
-            "model": model,
-            "prompt": prompt,
-            "stream": False,  # We want a complete response, not streaming
-            "options": {
-                "num_predict": max_tokens,
-                "temperature": temperature,
-                "num_ctx": 2048,  # Reduced context window for speed
-                "repeat_last_n": 64,  # Reduce repetition checking
-                "repeat_penalty": 1.1,  # Slightly reduce penalty
-                "top_k": 40,  # Reduce top-k for speed
-                "top_p": 0.9,  # Reduce top-p for speed
-            },
-        }
-
-        print(f"Querying Ollama model: {model}")
-        print(f"Prompt length: {len(prompt)} characters")
-
-        # Send request with reduced timeout for faster failure detection
-        response = requests.post(url, json=payload, timeout=30)
-
-        if response.status_code == 200:
-            result = response.json()
-            return result.get("response", "").strip()
-        else:
-            print(f"Error: HTTP {response.status_code}")
-            print(f"Response: {response.text}")
-            return None
-
-    except requests.exceptions.ConnectionError:
-        print(
-            "Error: Could not connect to Ollama. Make sure Ollama is running on localhost:11434"
-        )
-        print("Start Ollama with: ollama serve")
-        return None
-    except requests.exceptions.Timeout:
-        print(
-            "Error: Request timed out. The model might be too slow or the prompt too long."
-        )
-        return None
-    except Exception as e:
-        print(f"Error querying Ollama: {e}")
-        return None
+    return model_manager.query_ollama_optimized(
+        prompt=prompt,
+        model=model,
+        max_tokens=max_tokens,
+        temperature=temperature,
+        timeout=TIMEOUT,
+    )
 
 
 def get_available_models(base_url="http://localhost:11434"):
-    """Get list of available models from Ollama."""
-    try:
-        url = f"{base_url}/api/tags"
-        response = requests.get(url, timeout=10)
-
-        if response.status_code == 200:
-            data = response.json()
-            models = [model["name"] for model in data.get("models", [])]
-            return models
-        else:
-            print(f"Error getting models: HTTP {response.status_code}")
-            return []
-
-    except Exception as e:
-        print(f"Error getting available models: {e}")
-        return []
+    """Get list of available models from Ollama using optimized manager."""
+    return model_manager.get_available_models()
 
 
-def test_ollama_connection(model="qwen2:1.5b"):
-    """Test connection to Ollama with a simple query."""
+def test_ollama_connection(model=PREFERRED_MODEL):
+    """Test connection to Ollama with a simple query using optimized manager."""
     test_prompt = "What is 2+2? Answer briefly."
 
-    print(f"Testing Ollama connection with model: {model}")
-    response = query_ollama(test_prompt, model=model, max_tokens=50)
-
-    if response:
-        print(f"✅ Ollama is working! Test response: {response}")
-        return True
-    else:
-        print("❌ Ollama connection failed")
+    try:
+        response = model_manager.query_ollama_optimized(
+            test_prompt, model=model, max_tokens=50
+        )
+        if response:
+            print(f"✅ Ollama connection successful with model: {model}")
+            return True
+        else:
+            print(f"❌ Ollama query failed with model: {model}")
+            return False
+    except Exception as e:
+        print(f"❌ Ollama connection error: {e}")
         return False
 
 
@@ -214,100 +327,54 @@ Answer:"""
 
 
 def query_with_optimized_fallback(
-    prompt, preferred_models=None, max_tokens=256, temperature=0.3
+    prompt, preferred_models=None, max_tokens=MAX_TOKENS, temperature=TEMPERATURE
 ):
     """
     Optimized query with fallback to different models with faster parameters.
+    Now uses the OptimizedModelManager.
     """
-    if preferred_models is None:
-        preferred_models = [
-            "qwen2:1.5b",
-            "phi3",
-            "mistral",
-            "llama2",
-        ]  # Updated to match optimized system
-
-    # Get available models
-    available_models = get_available_models()
-
-    if not available_models:
-        print("No models available in Ollama")
-        return None, None
-
-    # Filter preferred models to only those available
-    models_to_try = [
-        model
-        for model in preferred_models
-        if any(model in available for available in available_models)
-    ]
-
-    # If no preferred models available, use the first available model
-    if not models_to_try:
-        models_to_try = [available_models[0]]
-
-    for model in models_to_try:
-        print(f"Attempting with model: {model}")
-
-        # Use optimized parameters
-        response = query_ollama(
-            prompt, model=model, max_tokens=max_tokens, temperature=temperature
-        )
-
-        if response:
-            print(f"✅ Success with model: {model}")
-            return response, model
-        else:
-            print(f"❌ Failed with model: {model}")
-
-    print("All models failed")
-    return None, None
+    return model_manager.query_with_smart_fallback(
+        prompt=prompt, max_tokens=max_tokens, temperature=temperature
+    )
 
 
-def run_rag_query(query, db=None, k=3, max_tokens=256):
+def optimized_rag_query(query: str, k: int = 3) -> Dict[str, Any]:
     """
-    OPTIMIZED RAG pipeline with performance improvements: translate query -> query database -> generate prompt -> get LLM response.
-
-    Args:
-        query: User question (in any supported language)
-        db: Vector database (will load if None)
-        k: Number of relevant chunks to retrieve (reduced from 5 to 3)
-        max_tokens: Maximum tokens for LLM response (reduced from 512 to 256)
-
-    Returns:
-        Dictionary with query results and metadata
+    Fully optimized RAG query with maximum performance integration
     """
-    # Try optimized version first
-    try:
-        from optimized_database import optimized_rag_query_v2
+    from query_database import db_manager, generate_optimized_prompt_template
 
-        return optimized_rag_query_v2(query, k=k)
-    except ImportError:
-        pass
-
-    # Fallback to optimized implementation
     start_time = time.time()
 
-    # Load database if not provided
-    if db is None:
-        db = load_database()
-        if db is None:
-            return {
-                "query": query,
-                "answer": "Database not available. Please create the vector database first.",
+    # Empty Query Handling - Add proper validation
+    if not query or not query.strip():
+        return {
+            "query": query,
+            "answer": "Empty query provided. Please ask a specific question.",
+            "success": False,
+            "sources": [],
+            "processing_time": time.time() - start_time,
+            "translation_info": {
+                "original_query": query,
+                "processed_query": query,
+                "language_detected": "unknown",
+                "translation_needed": False,
+                "translation_result": None,
                 "success": False,
-                "processing_time": time.time() - start_time,
-            }
+                "error": "Empty query",
+            },
+        }
 
-    print(f"\n🔍 Processing query: '{query}'")
+    # Optimize language detection
+    query_clean = query.strip().lower()
 
-    # OPTIMIZATION: Skip translation for English queries
-    if query.lower().replace(" ", "").isascii() and not any(
+    # Skip translation for English (major optimization)
+    if query_clean.replace(" ", "").isascii() and not any(
         char in query for char in "অআইউএওকখগঘচছজঝটঠড"
     ):
         # English query - skip translation
-        search_query = query
-        original_query = query
-        translation_result = {
+        processed_query = query
+        translation_info = {
             "original_query": query,
             "processed_query": query,
             "language_detected": "english",
@@ -315,48 +382,43 @@ def run_rag_query(query, db=None, k=3, max_tokens=256):
             "translation_result": None,
             "success": True,
         }
-        print(f"🔤 English query detected - skipping translation")
+        print(f"🔤 English query - skipping translation")
     else:
-        # Process query with translation (if needed)
-        translation_result = process_query_with_translation(query)
-
-        if not translation_result["success"]:
+        # Non-English query - use translation
+        translation_info = process_query_with_translation(query)
+        if not translation_info["success"]:
             return {
                 "query": query,
-                "answer": f"Query processing failed: {translation_result.get('error', 'Unknown error')}",
+                "answer": f"Query processing failed: {translation_info.get('error', 'Unknown error')}",
                 "success": False,
                 "sources": [],
                 "processing_time": time.time() - start_time,
+                "translation_info": translation_info,
             }
+        processed_query = translation_info["processed_query"]
 
-        # Use the processed (possibly translated) query for database search
-        search_query = translation_result["processed_query"]
-        original_query = translation_result["original_query"]
-
-        # Log translation if it happened
-        if translation_result["translation_needed"]:
-            print(f"🌐 Translated '{original_query}' to '{search_query}'")
-
-    # Retrieve relevant documents using the processed query
-    results = query_database(db, search_query, k=k)
+    # Use cached database query
+    results = db_manager.query_database_cached(processed_query, k=k)
 
     if not results:
         return {
             "query": query,
-            "original_query": original_query,
-            "search_query": search_query,
-            "answer": "No relevant information found in the database.",
+            "answer": "No relevant information found.",
             "success": False,
             "sources": [],
-            "translation_info": translation_result,
             "processing_time": time.time() - start_time,
+            "translation_info": translation_info,
         }
 
-    # OPTIMIZATION: Generate optimized prompt with reduced length
-    prompt = generate_optimized_prompt_template(original_query, results)
+    # Generate ultra-optimized prompt
+    prompt = generate_optimized_prompt_template(query, results)
 
-    # OPTIMIZATION: Get LLM response with reduced parameters
-    answer, model_used = query_with_optimized_fallback(prompt, max_tokens=max_tokens)
+    # Use optimized model query with reduced parameters for speed
+    answer, model_used = model_manager.query_with_smart_fallback(
+        prompt,
+        max_tokens=180,  # Further reduced for speed
+        temperature=0.1,  # Further reduced for speed
+    )
 
     processing_time = time.time() - start_time
 
@@ -367,28 +429,47 @@ def run_rag_query(query, db=None, k=3, max_tokens=256):
         ]
         return {
             "query": query,
-            "original_query": original_query,
-            "search_query": search_query,
             "answer": answer,
             "model_used": model_used,
             "success": True,
             "sources": sources,
             "num_sources": len(sources),
-            "translation_info": translation_result,
             "processing_time": processing_time,
             "prompt_length": len(prompt),
+            "translation_info": translation_info,
         }
     else:
         return {
             "query": query,
-            "original_query": original_query,
-            "search_query": search_query,
             "answer": "Failed to generate response from LLM.",
             "success": False,
             "sources": [],
-            "translation_info": translation_result,
             "processing_time": processing_time,
+            "translation_info": translation_info,
         }
+
+
+def run_rag_query(query, db=None, k=3, max_tokens=256):
+    """
+    Main RAG pipeline - now fully optimized and integrated.
+
+    This function uses all optimizations:
+    - Optimized model management with caching
+    - Optimized database management with caching
+    - Optimized translation handling
+    - Optimized prompt generation
+
+    Args:
+        query: User question (in any supported language)
+        db: Vector database (ignored, uses optimized manager)
+        k: Number of relevant chunks to retrieve
+        max_tokens: Maximum tokens for LLM response
+
+    Returns:
+        Dictionary with query results and metadata
+    """
+    # Use fully optimized pipeline
+    return optimized_rag_query(query, k=k)
 
 
 def interactive_rag_session():

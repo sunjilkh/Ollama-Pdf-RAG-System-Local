@@ -20,11 +20,7 @@
       "response_time": 30.079957723617554,
       "sources_found": 3,
       "model_used": "phi3",
-      "source_pages": [
-        25,
-        23,
-        34
-      ]
+      "source_pages": [25, 23, 34]
     },
     {
       "test_id": "sort_001",
@@ -38,11 +34,7 @@
       "response_time": 47.399983406066895,
       "sources_found": 3,
       "model_used": "phi3",
-      "source_pages": [
-        50,
-        36,
-        60
-      ]
+      "source_pages": [50, 36, 60]
     },
     {
       "test_id": "complexity_001",
@@ -56,11 +48,7 @@
       "response_time": 40.59494161605835,
       "sources_found": 3,
       "model_used": "phi3",
-      "source_pages": [
-        190,
-        200,
-        201
-      ]
+      "source_pages": [190, 200, 201]
     },
     {
       "test_id": "ds_001",
@@ -74,11 +62,7 @@
       "response_time": 37.43566823005676,
       "sources_found": 3,
       "model_used": "phi3",
-      "source_pages": [
-        307,
-        306,
-        309
-      ]
+      "source_pages": [307, 306, 309]
     },
     {
       "test_id": "dp_001",
@@ -92,11 +76,7 @@
       "response_time": 41.230210304260254,
       "sources_found": 3,
       "model_used": "phi3",
-      "source_pages": [
-        379,
-        379,
-        399
-      ]
+      "source_pages": [379, 379, 399]
     },
     {
       "test_id": "heap_001",
@@ -110,11 +90,7 @@
       "response_time": 44.03371000289917,
       "sources_found": 3,
       "model_used": "phi3",
-      "source_pages": [
-        171,
-        177,
-        180
-      ]
+      "source_pages": [171, 177, 180]
     },
     {
       "test_id": "graph_001",
@@ -128,11 +104,7 @@
       "response_time": 38.70772624015808,
       "sources_found": 3,
       "model_used": "phi3",
-      "source_pages": [
-        679,
-        723,
-        682
-      ]
+      "source_pages": [679, 723, 682]
     },
     {
       "test_id": "negative_001",
@@ -146,11 +118,7 @@
       "response_time": 24.91614270210266,
       "sources_found": 3,
       "model_used": "phi3",
-      "source_pages": [
-        1074,
-        133,
-        1002
-      ]
+      "source_pages": [1074, 133, 1002]
     },
     {
       "test_id": "negative_002",
@@ -164,11 +132,7 @@
       "response_time": 20.610079288482666,
       "sources_found": 3,
       "model_used": "phi3",
-      "source_pages": [
-        609,
-        169,
-        614
-      ]
+      "source_pages": [609, 169, 614]
     }
   ]
 }

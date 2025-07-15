@@ -3,6 +3,7 @@ from embedding import get_embedding_function_with_fallback
 from assign_ids import assign_unique_ids
 from split import chunks
 import os
+import chromadb
 
 
 def create_or_update_database(chunks_with_ids, persist_directory="db"):
@@ -26,11 +27,25 @@ def create_or_update_database(chunks_with_ids, persist_directory="db"):
         print(f"Error initializing embedding function: {e}")
         return None
 
-    # Create or load existing database
+    # Create or load existing database with proper ChromaDB client configuration
     print(f"Setting up ChromaDB in directory: {persist_directory}")
-    db = Chroma(
-        persist_directory=persist_directory, embedding_function=embedding_function
-    )
+    
+    try:
+        # Try with PersistentClient for newer ChromaDB versions
+        client = chromadb.PersistentClient(path=persist_directory)
+        
+        db = Chroma(
+            client=client,
+            embedding_function=embedding_function,
+        )
+        
+    except Exception as client_error:
+        print(f"PersistentClient failed: {client_error}")
+        # Fallback to legacy configuration
+        db = Chroma(
+            persist_directory=persist_directory, 
+            embedding_function=embedding_function
+        )
 
     # Get existing IDs to avoid duplicates
     try:
