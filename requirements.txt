@@ -5,7 +5,7 @@ langchain-ollama
 langchain-chroma
 chromadb
 pytest
-boto3
+boto3 
 langdetect
 sentence-transformers
 transformers
